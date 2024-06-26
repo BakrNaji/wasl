@@ -1,0 +1,193 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+إتمام الدفع
+{% endblock %}
+
+{% block content %}
+<body>
+    <div class="background" style="direction: rtl;">
+        <form method="post" enctype="multipart/form-data" class="feasibility-form">
+            {% csrf_token %}
+            <h2>طلب دراسة جدوى</h2>
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="id_project_name">اسم المشروع:</label>
+                            {{ form.project_name }}
+                        </div>
+                        <div class="form-group">
+                            <label for="id_description">وصف المشروع:</label>
+                            {{ form.description }}
+                        </div>
+                        <div class="form-group">
+                            <label for="id_goals">أهداف المشروع:</label>
+                            {{ form.goals }}
+                        </div>
+                        <div class="form-group">
+                            <label for="id_target_audience">الجمهور المستهدف:</label>
+                            {{ form.target_audience }}
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="id_competitors">المنافسين الرئيسيين:</label>
+                            {{ form.competitors }}
+                        </div>
+                        <div class="form-group">
+                            <label for="id_resources">الموارد المتاحة:</label>
+                            {{ form.resources }}
+                        </div>
+                        <div class="form-group">
+                            <label for="id_additional_info">معلومات إضافية:</label>
+                            {{ form.additional_info }}
+                        </div>
+                        <div class="form-group">
+                            <label for="id_study_type">اختر أنواع الدراسات المطلوبة:</label>
+                            {{ form.study_type }}
+                        </div>
+                        <div class="form-group">
+                            <label for="id_supporting_documents">المستندات الداعمة:</label>
+                            {{ form.supporting_documents }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="payment-group">
+                <p>الرجاء إيداع مبلغ 50 دولار لكل خدمة دراسة.</p>
+                <div class="form-group">
+                    <label for="id_pay_name">اسم الدفع:</label>
+                    {{ form.pay_name }}
+                </div>
+                <div class="form-group">
+                    <label for="id_image">صورة الدفع:</label>
+                    {{ form.image }}
+                </div>
+            </div>
+            <div class="text-center">
+                <button type="submit" class="btn btn-primary">إرسال الطلب</button>
+            </div>
+        </form>
+    </div>
+</body>
+
+<style>
+body, html {
+    height: 80%;
+    margin: 0;
+    font-family: 'Arial', sans-serif;
+}
+
+.background {
+    background-image: url('{% static "assets/images/about-4mg.jpg" %}');
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    min-height: 100%;
+    padding: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.feasibility-form {
+    max-width: 800px;
+    width: 100%;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+    background-color: rgba(255, 255, 255, 0.9); /* لون خلفية شفاف */
+    position: relative;
+    overflow: hidden;
+    margin-top: 32px;
+}
+
+.feasibility-form label {
+    display: block;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 5px;
+    transition: color 0.3s ease;
+}
+
+.feasibility-form input[type="text"],
+.feasibility-form textarea,
+.feasibility-form select {
+    width: calc(100% - 20px);
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+    background-color: #fff;
+    transition: box-shadow 0.3s ease, border-color 0.3s ease;
+}
+
+.feasibility-form input[type="text"]:focus,
+.feasibility-form textarea:focus,
+.feasibility-form select:focus {
+    box-shadow: 0 0 10px rgba(0, 123, 255, 0.5);
+    border-color: #007bff;
+}
+
+.feasibility-form select,
+.feasibility-form .checkbox {
+    padding: 10px;
+    background-color: #fff;
+}
+
+.feasibility-form .btn-primary {
+    background-color: #007bff;
+    border: none;
+    color: #fff;
+    padding: 10px 20px;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.feasibility-form .btn-primary:hover {
+    background-color: #0056b3;
+    transform: scale(1.1);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+}
+
+.container {
+    padding: 20px;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.text-center {
+    text-align: center;
+}
+
+.form-group label:hover {
+    color: #007bff;
+}
+
+.payment-group {
+    border: 2px dashed #007bff;
+    padding: 15px;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+    margin-top: 20px;
+}
+
+.payment-group label {
+    color: #007bff;
+}
+
+.payment-group p {
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 10px;
+}
+</style>
+{% endblock %}

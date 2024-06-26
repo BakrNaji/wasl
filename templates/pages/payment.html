@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="payment-page">
+    <h2>إتمام عملية الدفع</h2>
+    <p>الرجاء اختيار طريقة الدفع المفضلة لديك:</p>
+    <!-- يمكنك إضافة خيارات الدفع المختلفة هنا مثل PayPal أو Stripe -->
+    <form action="https://www.paypal.com/cgi-bin/webscr" method="post">
+        <!-- إعدادات PayPal -->
+        <input type="hidden" name="business" value="YOUR_PAYPAL_BUSINESS_ACCOUNT">
+        <input type="hidden" name="cmd" value="_xclick">
+        <input type="hidden" name="item_name" value="Feasibility Study">
+        <input type="hidden" name="amount" value="AMOUNT">
+        <input type="hidden" name="currency_code" value="USD">
+        <button type="submit" class="btn btn-primary">ادفع الآن باستخدام PayPal</button>
+    </form>
+</div>
+{% endblock %}

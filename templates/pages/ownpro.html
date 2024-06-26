@@ -1,0 +1,142 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<div class="amazing-dealsO" dir="rtl" >
+        <div class="col-lg-6 col-sm-6">
+            <div class="item">
+              <div class="row">
+                <div class="col-lg-6">
+                  <div class="image">
+                    <img src="{% static  'assets/images/deals-02.jpg' %}" >
+                  </div>
+                </div>
+                <div class="col-lg-6 align-self-center">
+                  <div class="content">
+                    <span class="info">سوقي للتجارة الالكترونية </span>
+                    <h4>سعر المشروع</h4>
+                    <div class="row">
+                      <div class="col-6">
+                        <i class="fa fa-clock"></i>
+                        <span class="list">تصيف المشروع</span>
+                      </div>
+                      <div class="col-6">
+                        <i class="fa fa-map"></i>
+                        <span class="list">معلومات المشروع</span>
+                      </div>
+                    </div>
+                    <p>سوقي هو عباره عن شركة تجارة الكترونية قائمة علا الاستيراد من الصين والبيع في عدة بلدان</p>
+                    <div class="main-button">
+                      <a href="{% url 'invreq' %}">الاستثمار في المشروع</a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>    
+   
+</div>
+
+    <style>
+
+/* @media (min-width: 992px){
+.col-lg-6 {
+    flex: 0 0 auto;
+    width: 75%;
+    margin: 0 auto;
+}
+}         */
+        .amazing-dealsO {
+  margin-top: 120px;
+  
+}
+
+.amazing-dealsO .item .image {
+  
+  overflow: hidden;
+}
+
+.amazing-dealsO .item {
+  background-color: #f7f7f7;
+  border-radius: 23px;
+  padding-right: 30px;
+  margin-bottom: 30px;
+}
+
+.amazing-dealsO .item span.info {
+  color: #22b3c1;
+  font-size: 15px;
+  margin-bottom: 20px;
+  display: block;
+}
+
+.amazing-dealsO .item h4 {
+  font-size: 20px;
+  font-weight: 700;
+  padding-bottom: 25px;
+  margin-bottom: 10px;
+  border-bottom: 1px solid #ddd;
+}
+
+.amazing-dealsO .item i {
+  color: #777;
+  margin-right: 5px;
+}
+
+.amazing-dealsO .item span.list {
+  font-size: 15px;
+  color: #afafaf;
+  font-weight: 500;
+}
+
+.amazing-dealsO .item .content {
+  padding: 30px 0px;
+}
+
+.amazing-dealsO .item p {
+    color: #111;
+    
+
+  padding-top: 25px;
+  margin-top: 10px;
+  border-top: 1px solid #ddd;
+  margin-bottom: 30px;
+}
+
+
+.amazing-dealsO ul.page-numbers {
+  text-align: center;
+  margin-top: 30px;
+}
+
+.amazing-dealsO ul.page-numbers li {
+  display: inline-block;
+  margin: 0px 5px;
+}
+
+.amazing-dealsO ul.page-numbers li a {
+  display: inline-block;
+  width: 46px;
+  height: 46px;
+  border: 1px solid #22b3c1;
+  line-height: 44px;
+  color: #22b3c1;
+  text-align: center;
+  font-size: 18px;
+  font-weight: 500;
+  border-radius: 50%;
+  transition: all .3s;
+}
+
+.amazing-dealsO ul.page-numbers li.active a,
+.amazing-dealsO ul.page-numbers li a:hover {
+  background-color: #22b3c1;
+  color: #fff;
+}
+
+.amazing-dealsO ul.page-numbers li:first-child a,
+.amazing-dealsO ul.page-numbers li:last-child a {
+  border: none;
+}
+    </style>
+
+{% endblock %}

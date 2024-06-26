@@ -1,0 +1,814 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+<br>
+<br>
+<br>
+
+{% for message in messages %}
+<div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+  <li class="{{ message.tags }}">{{ message }}</li>
+  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="close"></button>
+</div>
+{% endfor %}
+  <section id="section-1">
+    <div class="content-slider">
+      {% if promo_requests %}
+      {% for promo_request in promo_requests %}
+        {% if promo_request.active %}
+          <input type="radio" id="banner{{ forloop.counter }}" class="sec-1-input" name="banner" {% if forloop.first %}checked{% endif %}>
+        {% endif %}
+      {% endfor %}
+      <div class="slider">
+        {% for promo_request in promo_requests %}
+          {% if promo_request.active %}
+            <div id="top-banner-{{ forloop.counter }}" class="banner">
+              <div class="banner-inner-wrapper header-text">
+                <div class="main-caption" style="position: relative; padding: 40px; color: #fff; text-align: center; border-radius: 15px; overflow: hidden;">
+                  {% if promo_request.project.image %}
+                    <img src="{{ promo_request.project.image.url }}" alt="{{ promo_request.project.title }}" class="promo-image">
+                  {% else %}
+                    <img src="{% static 'assets/images/myp.png' %}" alt="Default Image" class="promo-image">
+                  {% endif %}
+                  <div class="caption-overlay">
+                    <h1>{{ promo_request.project.title }}</h1>
+                    <p>{{ promo_request.project.discripe }}</p>
+                    <p class="investment-opportunity">فرصة استثمارية لا تُفوَّت! انضم إلى مشروعنا وكن جزءًا من نجاح مبهر. استثمر الآن وحقق أرباحًا مجزية.</p>
+                    <div class="border-button">
+                      <a href="{% url 'deals' %}">الاستثمار في المشروع</a>
+                    </div>
+                  </div>
+                </div>
+                <div class="container">
+                  <div class="row">
+                    <div class="col-lg-12">
+                      <div class="more-info">
+                        <div class="row">
+                          <div class="col-lg-3 col-sm-6 col-6" style="flex: 0 0 auto; width: 20%;">
+                            <i class="fa fa-map"></i>
+                            <h4><span>موقع المشروع:</span><br>{{ promo_request.project.address }}<em></em></h4>
+                          </div>
+                          <div class="col-lg-3 col-sm-6 col-6" style="flex: 0 0 auto; width: 20%;">
+                            <i class="fa fa-globe"></i>
+                            <h4><span>تصنيف المشروع:</span><br>{{ promo_request.project.category }}<em></em></h4>
+                          </div>
+                          <div class="col-lg-3 col-sm-6 col-6" style="flex: 0 0 auto; width: 20%;">
+                            <i class="fa fa-home"></i>
+                            <h4><span>التكلفة المقدرة:</span><br>{{ promo_request.project.cost }}</h4>
+                          </div>
+                          <div class="col-lg-3 col-sm-6 col-6" style="flex: 0 0 auto; width: 20%;">
+                            <i class="fa fa-user"></i>
+                            {% if promo_request.title_length > 13 %}
+                              <h4 style="font-size: 10px;"><span>اسم المشروع:</span><br>{{ promo_request.project.title }}</h4>
+                            {% else %}
+                              <h4><span>اسم المشروع:</span><br>{{ promo_request.project.title }}</h4>
+                            {% endif %}
+                          </div>
+                          <div class="col-lg-3 col-sm-6 col-6" style="flex: 0 0 auto; width: 20%;">
+                            <div class="main-button">
+                              <a href="{% url 'deals' %}">قراءة المزيد</a>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          {% endif %}
+        {% endfor %}
+      </div>
+      
+      <nav>
+        <div class="controls">
+          {% for promo_request in promo_requests %}
+            {% if promo_request.active %}
+              <label for="banner{{ forloop.counter }}"><span class="progressbar"><span class="progressbar-fill"></span></span><span class="text">{{ forloop.counter }}</span></label>
+            {% endif %}
+          {% endfor %}
+        </div>
+      </nav>
+    {% else %}
+      <div class="no-promo-requests" style="text-align: center; padding: 50px;">
+        <img src="{% static 'assets/images/myp.png' %}" alt="No Promo Requests" class="promo-image">
+        <!-- <h2 style="color: #333; margin-top: 20px;">لا توجد طلبات ترويج حالياً</h2> -->
+      </div>
+    {% endif %}
+  </div>
+</section>
+
+<div><br><br><br><br></div>
+
+
+  
+  <div class="amazing-deals">
+  <div class="container">
+    <div class="row">
+      <div class="containerrr"  style="direction: rtl;">
+        <div class="text-box">
+            <h2>لماذا منصة وصل؟</h2>
+            <p>1. توفير فرص استثمارية مبتكرة وواعدة:</p>
+            <ul>
+                <li>- توفير فرص استثمارية متنوعة للمستثمرين.</li>
+                <li>- تعزيز تنويع محفظة الاستثمارات وزيادة الفرص لتحقيق عوائد مجزية.</li>
+            </ul>
+            <p>2. تسهيل عملية الاستثمار وتحسين نتائجها:</p>
+            <ul>
+                <li>- استخدام التكنولوجيا لتسهيل عمليات الاستثمار.</li>
+                <li>- تحسين تجربة المستثمر وفعالية استخدام المنصة.</li>
+            </ul>
+            <p>3. تعزيز التواصل بين المستثمرين وأصحاب المشاريع:</p>
+            <ul>
+                <li>- إنشاء بيئة تواصل فعالة بين المستثمرين ورواد الأعمال.</li>
+                <li>- تعزيز التفاعل والتعاون لتحقيق المشاريع.</li>
+            </ul>
+            <p>4. تحسين مستوى الشفافية والثقة:</p>
+            <ul>
+                <li>- رفع مستوى الشفافية في عمليات الاستثمار.</li>
+                <li>- بناء ثقة المستثمرين وتحفيز مشاركتهم.</li>
+            </ul>
+            <p>5. دعم رواد الأعمال والمشاريع الناشئة:</p>
+            <ul>
+                <li>- تقديم الدعم والموارد لرواد الأعمال والمشاريع الناشئة.</li>
+                <li>- تعزيز نجاحها وتطوير أعمالها على المدى الطويل.</li>
+            </ul>
+        </div>
+    
+        <div class="image-box">
+            <div class="main-container-image">
+            </div>
+        </div>
+    </div>
+    
+      
+    <div class="main-container">
+      <!-- القطعة الأولى -->
+      <div class="info-blockk">
+        <div class="info-text">لمعرفة كل ما هو متعلق برفع المشاريع والترويج ، انتقل الى الصفحة التالية</div>
+        <a href="{% url 'owner_method' %}" class="info-linkk">مساعدة مالك المشروع</a>
+      </div>
+    
+ <!-- القطعة الثالثة -->
+ <div class="info-blockk">
+  <div class="info-text">طلب خدمة دراسة جدوى للمشاريع. سواء كنت مستثمرًا أو مالك مشروع، احصل على دراسة جدوى متكاملة.</div>
+  <a href="{% url 'feasibility_study' %}" class="info-linkk">طلب دراسة جدوى</a>
+</div>
+
+
+      <!-- القطعة الثانية -->
+      <div class="info-blockk">
+        <div class="info-text"> لمعرفة كل ما هو متعلق بالاستثمار في المشاريع انتقل الى الصفحة التالية</div>
+        <a href="{% url 'inv_method' %}" class="info-linkk"> مساعدة المستثمر</a>
+      </div>
+    
+    </div>
+    <div class="container">
+      <div class="row">
+        {% for project in projects %}
+        <div class="col-lg-6 project-item" id="project{{ project.id }}" data-category="{% if project.category %}{{ project.category.category }}{% else %}none{% endif %}">
+            <!-- تفاصيل المشروع -->
+            <div class="item">
+              <div class="row">
+                <div class="col-lg-6 col-md-12">
+                  {% if project.image %}
+                  <div class="image" style="background-image: url('{{ project.image.url }}'); border-radius: 10px;">
+                    <div class="project-status">{{ project.status }}</div>
+                  </div>
+                  {% else %}
+                  <div class="image" style="background-color: #881782; height: 100%;">
+                    <div class="project-status">{{ project.status }}</div>
+                  </div>
+                  {% endif %}
+                </div>
+                <div class="col-lg-6 col-md-12 align-self-center">
+                  <div class="content">
+                    <span class="info">اسم المشروع: {{ project.title }} &nbsp;&nbsp; التقييم: {{ project.average_rating }}</span>
+                    <h4>التكلفة المقدرة: {{ project.cost }}</h4>
+                    <div class="row">
+                      <div class="col-6">
+                        <i class="fa fa-clock"></i>
+                        <span class="list">تصنيف المشروع</span>
+                        <div class="value" style="text-align: center; font-size: large; color: #000000;">{{ project.category }}</div>
+                      </div>
+                      <div class="col-6">
+                        <i class="fa fa-map"></i>
+                        <span class="list">موقع المشروع</span>
+                        <div class="value" style="text-align: center; font-size: large; color: #000000;">{{ project.address }}</div>
+                      </div>
+                    </div>
+                    <p>
+                      <span class="list">وصف المشروع</span>
+                      {{ project.discripe|safe }}
+                    </p>
+                    <div class="main-button1" >
+                      {% if request.user.investor %}
+                      <a href="{% url 'invreq' project.id %}">الاستثمار في المشروع</a>
+                      {% endif %}
+                      <a href="{% url 'project_detail' project.id %}">تعليقات حول المشروع</a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+        </div>
+        {% endfor %}
+      </div>
+      <div class="my-5 text-center">
+        <a href="{% url 'deals' %}" class="bg-Primary hover:bg-Primary/90 border-2 border-Primary text-StaticWhite focus:outline-Primary-300 transition-colors ease-in-out duration-300 rounded-lg p-2 outline-offset-2 text-center w-2/3 max-w-xs md:py-3">
+            <div class="text-lg md:text-xl" style="background-color: #22b3c1; font-size: 14px; color: #22b3c1; background-color: #eee; border: 1px solid #22b3c1; padding: 12px 30px; display: inline-block; border-radius: 25px; font-weight: 500; text-transform: capitalize; letter-spacing: 0.5px; transition: all .3s; position: relative; overflow: hidden;">
+                عرض المزيد
+            </div>
+        </a>
+    </div>
+    
+    </div>
+    
+
+
+
+
+
+
+        
+</div>
+</div></div>
+
+
+
+
+
+<div class="weekly-offers">
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-6 offset-lg-3">
+        <div class="section-heading text-center">
+          <h2>اسعار باقات الاعلان عن مشروعك</h2>
+          <p style="font-size: larger;">قم بالاشتراك في الباقات للترويج لمشروعك لوصولة لاكبر عدد من المستثمرين </p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="owl-weekly-offers owl-carousel">
+          <div class="item">
+            <div class="thumb">
+              <img src="assets/images/offers-01.jpg" alt="">
+              <div class="text">
+                <h4>الباقة الشهرية</h4><br>
+                <h6>$10</h6>
+                <div class="line-dec"></div>
+                <ul>
+                  
+                </ul>
+                <div class="main-button">
+                  <a href="project.html">مشاريعي</a>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="item">
+            <div class="thumb">
+              <img src="assets/images/offers-03.jpg" alt="">
+              <div class="text">
+                <h4>الباقة الذهبية</h4><br>
+                <h6>$15</h6>
+                <div class="line-dec"></div>
+                <ul>
+                  
+                </ul>
+                <div class="main-button">
+                  <a href="project.html">مشاريعي</a>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="item">
+            <div class="thumb">
+              <img src="assets/images/offers-02.jpg" alt="">
+              <div class="text">
+                <h4>الباقةالاسبوعية</h4><br>
+                <h6>$5</h6>
+                <div class="line-dec"></div>
+                <ul>
+                  
+                </ul>
+                <div class="main-button">
+                  <a href="project.html">مشاريعي</a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+<div class="call-to-action2">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-lg-8">
+        <div class="text-center">
+          <h2>لدينا</h2>
+        </div>
+      </div>
+    </div>
+    <div class="row justify-content-center">
+      <div class="col-md-6 col-lg-3">
+        <div class="count-area-content percentage text-center">
+          <div class="count-digit">{{ total_investmentrequest }}</div>
+          <div class="count-title">نجاح الاستثمار</div>
+        </div>
+      </div>
+      <div class="col-md-6 col-lg-3">
+        <div class="count-area-content text-center">
+          <div class="count-digit">{{ total_owners }}</div>
+          <div class="count-title">رواد مشاريع</div>
+        </div>
+      </div>
+      <div class="col-md-6 col-lg-3">
+        <div class="count-area-content new-students text-center">
+          <div class="count-digit">{{ total_investor }}</div>
+          <div class="count-title">مستثمرين</div>
+        </div>
+      </div>
+      <div class="col-md-6 col-lg-3">
+        <div class="count-area-content text-center">
+          <div class="count-digit">{{ total_projects }}</div>
+          <div class="count-title">مشاريع</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="call-to-action">
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-8">
+        <h1>قم بالاعلان عن مشروعك لايجاد المستثمرين  </h1>
+      </div>
+      <div class="col-lg-4">
+        <div class="border-button">
+          <a href="reservation.html"> </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+
+document.getElementById('new-filter-form').addEventListener('submit', function (event) {
+  event.preventDefault(); 
+
+  const selectedCategory = document.getElementById('categories').value;
+
+  projectItems.forEach(item => {
+    const itemCategory = item.dataset.category;
+
+    if (itemCategory === selectedCategory || selectedCategory === 'all') {
+      item.style.display = 'block';
+    } else {
+      item.style.display = 'none';
+    }
+  });
+});
+
+
+</script>
+
+<script>
+  const categoryLinks = document.querySelectorAll('.category-link');
+  const projectItems = document.querySelectorAll('.project-item');
+
+  categoryLinks.forEach(link => {
+    link.addEventListener('click', (event) => {
+      event.preventDefault();
+      const selectedCategory = link.dataset.category;
+
+      projectItems.forEach(item => {
+        const itemCategory = item.dataset.category;
+
+        if (itemCategory === selectedCategory || selectedCategory === 'all') {
+          item.style.display = 'block';
+        } else {
+          item.style.display = 'none';
+        }
+      });
+
+      if (selectedCategory === 'all') {
+        projectItems.forEach(item => {
+          item.style.display = 'block';
+        });
+      } else {
+        projectItems.forEach(item => {
+          const itemCategory = item.dataset.category;
+          if (!itemCategory) {
+            item.style.display = 'block';
+          }
+        });
+      }
+    });
+  });
+  document.addEventListener('DOMContentLoaded', function() {
+  var projectItems = document.querySelectorAll('.project-item');
+  projectItems.forEach(function(projectItem) {
+    projectItem.addEventListener('click', function() {
+      var projectId = this.id.replace('project', ''); // 
+      window.location.href = '/project_detail/' + projectId + '/'; // 
+    });
+  });
+});
+
+
+</script>
+
+
+
+<style>
+  .promo-image {
+    width: 100%;
+    height: auto;
+    border-radius: 15px;
+  }
+
+  .banner .caption-overlay {
+    background-color: rgba(0, 0, 0, 0.6);
+    padding: 30px;
+    border-radius: 15px;
+    margin-top: -56%;
+    position: relative;
+    z-index: 1;
+  }
+
+  .caption-overlay h1 {
+    margin: 0;
+    font-size: 36px;
+    font-weight: bold;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+  }
+
+  .caption-overlay p {
+    margin-top: 20px;
+    font-size: 18px;
+    line-height: 1.6;
+    color: #d1d1d1;
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
+  }
+
+  .caption-overlay .investment-opportunity {
+    margin-top: 20px;
+    font-size: 20px;
+    line-height: 1.8;
+    font-weight: bold;
+    color: #ffd700;
+    text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.7);
+  }
+
+  .caption-overlay .border-button a {
+    padding: 12px 25px;
+    background-color: #22b3c1;
+    color: #fff;
+    text-decoration: none;
+    border-radius: 5px;
+    font-size: 16px;
+    transition: background-color 0.3s, transform 0.3s;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  }
+  element.style {
+    text-align: center;
+    padding: 0px;
+    margin: 69px 50px 50px 50px;
+}
+  .caption-overlay .border-button a:hover {
+    background-color: #1a8a96;
+    transform: translateY(-2px);
+  }
+</style>
+
+<style>
+  .item {
+    margin-bottom: 30px;
+  }
+  
+  .project-image {
+    width: 100%;
+    height: 100%;
+    min-height: 300px; 
+    background-size: cover;
+    background-position: center;
+    border-radius: 15px;
+  }
+  
+  .content {
+    padding: 20px;
+  }
+  
+  @media (max-width: 768px) {
+    .project-image {
+      min-height: 200px;
+    }
+  
+    .content {
+      padding: 10px;
+    }
+  }
+
+  .containerrr .text-box p {
+    font-size: large;
+    color: #000000;
+  }
+  
+  .btn:focus {
+    color: var(--bs-btn-hover-color);
+    background-color: #22b3c1;
+    border-color: #22b3c1;
+    outline: 0;
+    box-shadow: var(--bs-btn-focus-box-shadow);
+}
+.search-form {
+      background-color: #22b3c1;
+      border-bottom-left-radius: 23px;
+      border-bottom-right-radius: 23px;
+      padding: 35px 60px;
+      margin-bottom: 20px;
+    }
+
+    .search-form h4 {
+      color: #fff;
+      font-size: 20px;
+      font-weight: 700;
+      margin-top: 10px;
+      
+    }
+
+    .search-form select {
+      background-color: transparent;
+      border: none;
+      outline: none;
+      box-shadow: none;
+      border-bottom: 1px solid #fff;
+      border-radius: 0px;
+      color: #fff;
+      font-size: 15px;
+      font-weight: 300;
+      width: 100%;
+      cursor: pointer;
+    }
+
+    .search-form option {
+      background-color: #1ea0ad;
+    }
+
+    .search-form button {
+      width: 100%;
+      text-align: center;
+      font-size: 14px;
+      color: #fff;
+      background-color: transparent;
+      border: 1px solid #fff;
+      padding: 8px 30px;
+      display: inline-block;
+      border-radius: 25px;
+      font-weight: 500;
+      text-transform: capitalize;
+      letter-spacing: 0.5px;
+      transition: all .3s;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .search-form button:hover {
+      background-color: #fff;
+      color: #22b3c1;
+    }
+  
+ 
+  
+  .images {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+  }
+
+
+
+
+
+  
+.our-facts h2 {
+    font-size: 38px;
+    color: #fff;
+    line-height: 50px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    margin-bottom: 50px;
+    text-align: center;
+  }
+  
+  .count-area-content {
+    text-align: center;
+    background-color: rgba(250,250,250,0.15);
+    border-radius: 20px;
+    padding: 25px 30px 35px 30px;
+    margin: 15px 0px;
+  }
+  
+  .percentage .count-digit:after {
+    content: '';
+    margin-left: 3px;
+  }
+  
+  .count-digit {
+      margin: 5px 0px;
+      color: #f5a425;
+      font-weight: 700;
+      font-size: 36px;
+  }
+  .count-title {
+      font-size: 18px;
+      font-weight: 500;
+      color: #fff;
+      letter-spacing: 0.5px;
+  }
+  
+  .new-students {
+    margin-top: 14px;
+  }
+  
+  
+  .our-facts h2 {
+    font-size: 38px;
+    color: #fff;
+    line-height: 50px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    margin-bottom: 50px;
+    text-align: center;
+  }
+  
+  .count-area-content {
+    text-align: center;
+    background-color: rgba(250,250,250,0.15);
+    border-radius: 20px;
+    padding: 25px 30px 35px 30px;
+    margin: 15px 0px;
+  }
+  
+  .percentage .count-digit:after {
+    content: '';
+    margin-left: 3px;
+  }
+  
+  .count-digit {
+      margin: 5px 0px;
+      color: #f5a425;
+      font-weight: 700;
+      font-size: 36px;
+  }
+  .count-title {
+      font-size: 18px;
+      font-weight: 500;
+      color: #fff;
+      letter-spacing: 0.5px;
+  }
+  
+  .new-students {
+    margin-top: 14px;
+  }
+
+
+
+
+
+
+
+.main-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  align-items: center;
+  padding: 14px;
+  background-color: #ffffff;
+  margin-bottom: 20px;
+}
+
+.info-blockk {
+  text-align: center;
+  padding: 20px;
+  border: 2px solid #f7f7f7;
+  border-radius: 10px;
+  width: 300px;
+  height: 250px;
+  background-color: #f7f7f7;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  margin: 10px; 
+}
+
+.info-text {
+  font-size: 22px;
+  margin-bottom: 10px;
+  color: #000000;
+}
+
+.info-linkk {
+  text-decoration: none;
+  background-color: #22b3c1;
+  color: #fff;
+  padding: 10px;
+  border-radius: 5px;
+  transition: background-color 0.3s ease;
+}
+
+.info-linkk:hover {
+  background-color: #afafaf;
+}
+
+
+@media (max-width: 768px) {
+  .info-blockk {
+    width: 100%;
+    margin: 10px 0; 
+  }
+}
+
+.main-button1 a {
+    font-size: 14px;
+    color: #fff;
+    background-color: #22b3c1;
+    border: 1px solid #22b3c1;
+    padding: 15px 8px;
+    display: inline;
+    border-radius: 25px;
+    font-weight: 500;
+    text-transform: capitalize;
+    letter-spacing: 0.5px;
+    transition: all .3s;
+    position: relative;
+    overflow: hidden;
+}
+
+
+.weekly-offers .item .thumb .text {
+    direction: rtl;
+    position: absolute;
+    background-color: #fff;
+    border-radius: 23px;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.15);
+    padding: 47px;
+    margin-right: 95px;
+}
+
+
+.project-status {
+  position: absolute;
+  background-color: #22b3c1;
+  padding: 7px;
+  border-top-left-radius: 10px ;
+  border-bottom-right-radius: 10px;
+}
+
+
+
+/*صفحة حسابي مالك مشروع ومستثمر خارب الناف 
+صلح فوتر صفحة التهنئة 
+مسافة من فوق في صفحة مراسلة الجدوى  للمالك
+شرط مايدخلك من القطعة ترفع مشروع الا اذا انته صاحب مشروع
+واستثمر عادي ياخذك الا الديلز
+شرط اذا ضفط رابط استثمر من الرئيسية اذا كان مستثمر فقط
+
+
+*/
+  </style>   
+  
+{% endblock %}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

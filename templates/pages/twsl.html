@@ -1,0 +1,246 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+twsl
+{% endblock %}
+
+{% block content %}
+
+<div class="page-heading">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-12">
+          <h4>معلومات التواصل</h4>
+          <h2>بإمكانك أيضًا التواصل معنا عبر قنوات الاتصال الأخرى ووسائل التواصل  الاجتماعي</h2>
+          <div class="border-button"><a href="#do"> تواصل </a></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div class="more-info reservation-info">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-4 col-sm-6">
+          <div class="info-item">
+            <i class="fa fa-phone"></i>
+            <h4>Make a Phone Call</h4>
+            <a href="#">+976 774 908 059 </a>
+          </div>
+        </div>
+        <div class="col-lg-4 col-sm-6">
+          <div class="info-item">
+            <i class="fa fa-envelope"></i>
+            <h4>Contact Us via Email</h4>
+            <a href="#">waslalyemen@email.com</a>
+          </div>
+        </div>
+        <div class="col-lg-4 col-sm-6">
+          <div class="info-item">
+            <i class="fa fa-map-marker"></i>
+            <h4>Visit Our Offices</h4>
+            <a href="#">24th Street North Avenue London, UK</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div class="reservation-form">
+    <div class="container">
+      <div class="row">
+        <!-- <div class="col-lg-12">
+          <div id="map">
+            <img src="{% static 'assets/images/logow.png' %}" width="100%" height="450px" frameborder="0" style="border:0; border-top-left-radius: 23px; border-top-right-radius: 23px;" allowfullscreen="">
+          </div>
+        </div> -->
+
+          <!-- {% for message in Messages %}
+    {% if message.admin_response %}
+        <div>
+            <p>{{ message.sender_username }}:</p>
+            <p>{{ message.content }}</p>
+        </div>
+        <div>
+            {% if message.body %}
+                <p><strong>أنت:</strong> {{ message.body }}</p>
+            {% endif %}
+            <p>إدارة المنصة: {{ message.admin_response }}</p>
+        </div>
+    {% endif %}
+{% endfor %} -->
+<div class="col-lg-12">
+<div id="messages-container">
+  {% for message in Messages %}
+  {% if message.admin_response %}
+      <div class="message-container">
+          <div class="user-message">
+              {% if message.body %}
+                  <p><strong>أنت:</strong> {{ message.body }}</p>
+              {% endif %}
+          </div>
+      </div>
+      <div class="message-container">
+          <div class="admin-response">
+              <p>إدارة المنصة: {{ message.admin_response }}</p>
+          </div>
+      </div>
+  {% else %}
+      <div class="message-container">
+          <div class="user-message">
+              <p><strong>أنت:</strong> {{ message.body }}</p>
+          </div>
+      </div>
+  {% endif %}
+{% endfor %}
+
+</div>
+</div>
+
+
+      
+      
+
+        
+          
+      <form id="reservation-form" name="gs" method="POST" onsubmit="return validateForm()">
+        {% csrf_token %}
+        <div class="row">
+            <div class="col-lg-12" id="do">
+                <h4>إذا كان لديك أي <em>سؤال</em> أو استفسار لا تتردد بالتواصل معنا من خلال <em>النموذج</em></h4>
+            </div>
+            <div class="col-lg-12">
+                <input type="text" name="name" id="name" placeholder="اسمك" {% if user.is_authenticated %} value="{{ user.username }}" readonly {% endif %}>
+            </div>
+            <div class="col-lg-12">
+                {% if not user.is_authenticated %}
+                <input type="email" name="email" id="email" placeholder="بريدك الإلكتروني">
+                {% endif %}
+                <textarea name="body" id="body" placeholder="نص الرسالة"></textarea>
+            </div>
+            <div class="col-lg-12">
+                <fieldset>
+                    <button type="submit" class="main-button">أرسال</button>
+                </fieldset>
+            </div>
+        </div>
+    </form>
+    
+    
+    
+    
+        </div>
+      </div>
+    </div>
+  </div>
+
+<style>
+  .message-container {
+    display: flex;
+}
+
+.user-message {
+    flex: 1;
+    text-align: left;
+    border: 1px solid black;
+    padding: 10px;
+    direction: ltr;
+
+}
+
+.admin-response {
+  flex: 1;
+
+    text-align: right;
+    border: 1px solid black;
+    padding: 10px;
+    direction: ltr;
+}
+.message-container {
+    margin-bottom: 20px;
+}
+
+
+
+textarea {
+  direction: rtl;
+  width: 100%; /* تحديد عرض النص في المربع */
+  height: 150px; /* تحديد ارتفاع المربع */
+  padding: 10px; /* تحديد المسافة الداخلية للنص داخل المربع */
+  box-sizing: border-box; /* تحديد طريقة حساب الحجم ليشمل الحدود والحشو */
+  border: 1px solid #ccc; /* تحديد الحدود للمربع */
+  border-radius: 5px; /* تحديد شكل الزوايا للمربع */
+  resize: vertical; /* السماح بالتغيير في ارتفاع المربع (ولكن لا يمكن تغيير العرض) */
+}
+
+/* تنسيق النص والعناصر المحيطة به */
+label {
+  
+  display: block; /* جعل العلامة تظهر على سطر منفصل */
+  margin-bottom: 5px; /* إضافة مسافة بين العلامة ومربع النص */
+}
+
+
+
+
+
+
+
+
+
+
+/* تنسيق الزر */
+.main-button {
+  background-color: #4CAF50;
+  border: none;
+  color: white;
+  padding: 10px 20px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin-top: 10px; /* إضافة مسافة بين الزر والعناصر الأخرى */
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+/* تنسيق الزر عند التحويل إلى الحالة النشطة (عند الضغط) */
+.main-button:active {
+  background-color: #45a049;
+
+}
+
+input {
+  direction: rtl;
+
+}
+
+
+</style>
+
+{% endblock %}
+
+
+<!-- <script>
+  setInterval(function() {
+      $.ajax({
+          type: 'GET',
+          url: '/update_messages/',
+          success: function(data) {
+              if (data.success) {
+                  // إعادة تحميل محتوى الرسائل
+                  $('#messages-container').load(location.href + '#messages-container');
+              }
+          },
+          error: function(xhr, status, error) {
+              console.error(xhr.responseText);
+          }
+      });
+  }, 5000); // تحديث الرسائل كل 5 ثواني (يمكنك تغيير هذا الرقم حسب الحاجة)
+</script>
+ -->

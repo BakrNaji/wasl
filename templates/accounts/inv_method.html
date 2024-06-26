@@ -1,0 +1,97 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+<div class="second-page-heading" style="background-image: none; background-color: cadetblue;">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-12">
+          <h4>كل ما تحتاج فهمه يوجد هنا</h4>
+          <h2>تعليمات خاصة للمستثمرين</h2>
+          <h4>إتبع الخطوات التي في الشرح للاستثمار في احد المشاريع</h4>
+          <div class="main-button"><a href="{% url 'deals' %}">تصفح المشاريع</a></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="more-info reservation-info">
+    <div class="container">
+        <div class="row">
+    <center>  
+        <div class="col-lg-4 col-sm-6">
+          <div class="info-item">
+            <i class="fa fa-upload"></i>
+            <div class="main-button">
+            <a href="#upload" style="color: black;">خطوات طلب استثمار مشروع</a>
+            </div>
+          </div>
+        </div>
+    </center>
+        </div>
+    </div>
+  </div>
+
+
+
+  <div class="more-about" style="direction: rtl;">
+    <div class="container">
+      <div class="row">
+        <center>
+        <div class="col-lg-10">
+          <div class="section-heading">
+            <h2 style="text-align: center; padding: 10px;" id="upload">خطوات طلب الاستثمار في مشروع</h2>
+            <h4 style="text-align: center;">لكي تتمكن من الاستثمار في المشاريع يجب عليك قبل كل شيء إنشاء حساب من نوع (مستثمر)</h4>
+          </div>
+          <div class="row">
+            <div class="col-lg-6">
+              <div class="info-item">
+                  <span>اولاً</span>
+                  <h4>اختار بعناية المشروع الذي تريد استثماره من خلال قرائة وصف المشروع .</h4>
+              </div>
+            </div>
+            <div class="col-lg-6">
+              <div class="info-item">
+                  <span>ثانياً</span>
+                <h4>اذا كنت تريد معرفة كل التفاصيل المتعلقة بالمشروع اللذي اخترته انقر على زر الاستثمار في المشروع ، سينقلك الى صفحة الدفع</h4>
+              </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="info-item">
+                    <span>ثالثاً</span>
+                    <h4>بعد نقلك الى صفحة الدفع يتعين عليك دفع مبلغ 5$ ليتم عرض كل تفاصيل المشروع لك في صفحة الاستثمارات</h4>
+                </div>
+              </div>
+              <div class="col-lg-6">
+                <div class="info-item">
+                    <span>رابعاً</span>
+                  <h4>بعد التحقق من اتمام دفعك سيتم عرض المشروع وتفاصيله كلها لك في صفحة الاستثمارات</h4>
+                </div>
+              </div>
+              <div class="col-lg-6">
+                <div class="info-item">
+                    <span>خامساً</span>
+                    <h4>سيتم التواصل معك لمعرفة انك تريد الوصول الى مالك المشروع اللذي تريد استثماره ، 
+                        اذا اردت الوصول لمالك المشروع سيتوجب عليك دفع مبلغ 5$ وسنوصلك بمالك المشروع للإتفاق معه 
+                    </h4>
+                </div>
+              </div>
+              <div class="col-lg-6">
+                <div class="info-item">
+                    <span>سادساً</span>
+                  <h4>الى هنا نكون قد جمعناك بمالك المشروع للاتفاق</h4>
+                </div>
+              </div>
+          </div>
+          <h4>اذا كان لديك اي سؤال او استفسار في اي وقت يمكنك مراسلتنا من خلال النقر على ايقونة الرسائل الموجودة اعلى الصفحة</h4>
+          <div class="main-button">
+            <a href="{% url 'deals' %}">تصفح المشاريع</a>
+          </div>
+        </div>
+    </center>
+      </div>
+    </div>
+  </div>
+
+
+
+{% endblock %}

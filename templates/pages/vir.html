@@ -1,0 +1,58 @@
+{% extends 'base.html' %}
+{% load static %}
+
+
+{% block content %}
+
+<div class="limiterV">
+    <div class="containerV-login100V">
+        <div class="wrapV-login100V">
+            <div class="login100V-pic js-tilt" data-tilt>
+                <img src="{% static 'assets/images/wasl1.jpg' %}" alt="IMG">
+            </div>
+
+            <form class="login100V-formV validate-formV">
+                <span class="login100V-formV-titleV">
+                    ادخل كود التحقق 
+                </span>
+
+                <!-- ................................................................................................... -->
+                <div class="wrapV-input100 validate-inputV" data-validate = "Valid email is required: ex@abc.xyz">
+                    <!-- <input class="input100" type="text" name="email" placeholder="Email">
+                    <span class="focus-input100"></span>
+                    <span class="symbol-input100">
+                        <i class="fa fa-envelope" aria-hidden="true"></i>
+                    </span> -->
+                </div>
+                
+
+
+
+
+
+
+                <div class="inputV-containerV">
+                    <input type="text" class="digitV-inputV" maxlength="1" pattern="[0-9]" ounli autofocus required>
+                    <input type="text" class="digitV-inputV" maxlength="1" pattern="[0-9]" autofocus required>
+                    <input type="text" class="digitV-inputV " maxlength="1" pattern="[0-9]" autofocus required>
+                    <input type="text" class="digitV-inputV" maxlength="1" pattern="[0-9]" autofocus required>
+                    <input type="text" class="digitV-inputV" maxlength="1" pattern="[0-9]" autofocus required>
+                  </div>
+                
+                    
+                <div class="containerV-login100V-formV-btnV">
+                    <button class="login100V-formV-btnV">
+                        Next
+                    </button>
+                </div>
+
+                <div class="text-center p-t-136">
+                    
+                </div>
+                
+            </form>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

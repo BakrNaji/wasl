@@ -1,0 +1,171 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+الخدمات
+{% endblock %}
+
+{% block content %}
+<div class="reservation-form">
+    <div class="container">
+      <div class="row">
+<div class="services-page container "  style="direction: rtl;">
+    <h2 class="page-title">خدماتك</h2>
+
+    <h3 class="section-title">طلبات ودراسات الجدوى:</h3>
+    {% if user_requests %}
+        <div class="feasibility-requests-studies-list">
+            {% for request in user_requests %}
+                <div class="request-study-item"  style="direction: rtl;">
+                    <div class="request-item">
+                        <h4 class="item-title">{{ request.project_name }}</h4>
+                        <div class="item-field"><strong>الوصف:</strong> {{ request.description }}</div>
+                        <div class="item-field"><strong>الأهداف:</strong> {{ request.goals }}</div>
+                        <div class="item-field"><strong>الجمهور المستهدف:</strong> {{ request.target_audience }}</div>
+                        <div class="item-field"><strong>المنافسين:</strong> {{ request.competitors }}</div>
+                        <div class="item-field"><strong>الموارد:</strong> {{ request.resources }}</div>
+                        <div class="item-field"><strong>معلومات إضافية:</strong> {{ request.additional_info }}</div>
+                        <div class="item-field"><strong>نوع الدراسة:</strong> {{ request.get_study_type_display }}</div>
+                        <div class="item-field"><strong>الوثائق الداعمة:</strong> 
+                            {% if request.supporting_documents %}
+                                <a href="{{ request.supporting_documents.url }}" class="document-link">عرض الوثائق</a>
+                            {% else %}
+                                لا توجد وثائق داعمة
+                            {% endif %}
+                        </div>
+                        <div class="item-field"><strong>اسم الدفع:</strong> {{ request.pay_name }}</div>
+                        <div class="item-field"><strong>رد الإدارة:</strong> {{ request.admin_response }}</div>
+                    </div>
+
+                    {% if request.feasibility_study %}
+                        <div class="study-item">
+                            <h4 class="item-title">{{ request.feasibility_study.project_name }}</h4>
+                            <div class="item-field"><strong>الوصف:</strong> {{ request.feasibility_study.description }}</div>
+                            <div class="item-field"><strong>تحليل السوق:</strong> {{ request.feasibility_study.market_analysis }}</div>
+                            <div class="item-field"><strong>التحليل المالي:</strong> {{ request.feasibility_study.financial_analysis }}</div>
+                            <div class="item-field"><strong>تقييم المخاطر:</strong> {{ request.feasibility_study.risk_assessment }}</div>
+                            <div class="item-field"><strong>التوصيات:</strong> {{ request.feasibility_study.recommendations }}</div>
+                            <p><a class="chat-link" href="{% url 'chat_list' request.feasibility_study.id %}">عرض الدردشة</a></p>
+                        </div>
+                    {% else %}
+                        <div class="no-study-item">
+                            <p>لا يوجد دراسة جدوى مرتبطة بعد.</p>
+                        </div>
+                    {% endif %}
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <p class="no-data">لا توجد طلبات دراسة جدوى حالياً.</p>
+    {% endif %}
+</div>
+      </div>
+      </div>
+    </div>
+<style>
+body {
+    background-color: #fff;
+    font-family: Arial, sans-serif;
+}
+
+.services-page {
+    background: #f9f9f9;
+    padding: 70px;
+}
+
+.page-title {
+    text-align: center;
+    color: #007bff;
+    margin-bottom: 30px;
+    font-size: 2em;
+    font-weight: bold;
+}
+
+.section-title {
+    margin-bottom: 20px;
+    color: #007bff;
+    font-size: 1.5em;
+    border-bottom: 2px solid #007bff;
+    display: inline-block;
+    padding-bottom: 5px;
+}
+
+.feasibility-requests-studies-list {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.request-study-item {
+    display: flex;
+    justify-content: space-between;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+    background-color: #fff;
+    transition: transform 0.3s, box-shadow 0.3s;
+    color: #666;
+
+}
+
+.request-study-item:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+}
+
+.request-item, 
+.study-item, 
+.no-study-item {
+    width: 48%;
+}
+
+.item-title {
+    margin-top: 0;
+    color: #007bff;
+    font-size: 1.2em;
+    font-weight: bold;
+}
+
+.item-field {
+    margin: 5px 0;
+    padding: 8px;
+    background: #f1f1f1;
+    border-radius: 5px;
+}
+
+.no-data {
+    color: #666;
+}
+
+.chat-link {
+    color: #007bff;
+    text-decoration: none;
+}
+
+.document-link {
+    color: #ff6347;
+    text-decoration: none;
+}
+
+@media (max-width: 768px) {
+    .services-page {
+        padding: 10px;
+    }
+
+    .feasibility-requests-studies-list {
+        gap: 15px;
+    }
+
+    .request-study-item {
+        flex-direction: column;
+    }
+
+    .request-item, 
+    .study-item, 
+    .no-study-item {
+        width: 100%;
+    }
+}
+</style>
+{% endblock %}

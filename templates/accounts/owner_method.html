@@ -1,0 +1,205 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+<div class="second-page-heading" style="background-image: none; background-color: cadetblue;">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-12">
+          <h4>كل ما تحتاج فهمه يوجد هنا</h4>
+          <h2>تعليمات خاصة لمالك المشروع</h2>
+          <h4>إتبع الخطوات التي في الشرح لرفع مشروعك بسهولة</h4>
+          <div class="main-button"><a href="{% url 'reservation' %}">رفع مشروعك</a></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="more-info reservation-info">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-4 col-sm-6">
+          <div class="info-item">
+            <i class="fa fa-upload"></i>
+            <div class="main-button">
+            <a href="#upload" style="color: black;">خطوات رفع مشروعك</a>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-4 col-sm-6">
+          <div class="info-item">
+            <i class="fa fa-bullhorn"></i>
+            <div class="main-button">
+            <a href="#promo" style="color: black;">خطوات الترويج لمشروعك</a>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-4 col-sm-6">
+          <div class="info-item">
+            <i class="fa fa-pencil"></i>
+            <div class="main-button">
+            <a href="#edit" style="color: black;">خطوات تعديل مشروع سابق</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
+  <div class="more-about" style="direction: rtl;">
+    <div class="container">
+      <div class="row">
+        <center>
+        <div class="col-lg-10">
+          <div class="section-heading">
+            <h2 style="text-align: center;padding: 10px;" id="upload">خطوات رفع مشروعك الى المنصة :</h2>
+            <p style="text-align: center;">لكي تتمكن من رفع مشروعك الى منصة وصل ، يجب عليك قبل كل شيء تسجيل حساب من نوع مالك مشروع .</p>
+          </div>
+          <div class="row">
+            <div class="col-lg-6">
+              <div class="info-item">
+                  <span>اولاً</span>
+                  <h4>اذهب الى صفحة إضافة مشروع الموجودة في الجزء العلوي من الموقع .</h4>
+              </div>
+            </div>
+            <div class="col-lg-6">
+              <div class="info-item">
+                  <span>ثانياً</span>
+                <h4>يجب عليك اختيار التصنيف المتوافق مع مشروعك لكي يسهل على المستثمرين رؤيته ، خاصة عندما يختار المستثمر صنف محدد من المشاريع ليستثمر بهم .</h4>
+              </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="info-item">
+                    <span>ثالثاً</span>
+                    <h4>من المهم جداً تحديد حالة مشروعك إن كان مشروع قيد الإنشاء او مشروع قائم او غير قائم .</h4>
+                </div>
+              </div>
+              <div class="col-lg-6">
+                <div class="info-item">
+                    <span>رابعاً</span>
+                  <h4>ادخل المعلومات الحقيقية عن مشروعك لان كل هذا في صالح نجاحك .</h4>
+                </div>
+              </div>
+              <div class="col-lg-6">
+                <div class="info-item">
+                    <span>خامساً</span>
+                    <h4>لديك حقل بعنوان (وصف المشروع ) اكتب بداخله نبذة مختصرة عن مشروعك بدون كتابة معلومات حساسة عن مشروعك في هذا الحقل .</h4>
+                </div>
+              </div>
+              <div class="col-lg-6">
+                <div class="info-item">
+                    <span>سادساً</span>
+                  <h4>لديك في الاسفل حقل بعنوان (تفاصيل المشروع) ، اكتب فيه كل التفاصيل المتعلقة بمشروعك بدون تزوير اي معلومة ولا تقلق حول التفاصيل التي ستدخلها لانه لن يسمح لأي شخص بالإطلاع عليها الى بعد موافقتك .</h4>
+                </div>
+              </div>
+          </div>
+          <p>بعد إرفاق كل البيانات المطلوب منك إدخالها والضغط على زر إرسال سيتم عرض مشروعك بين المشاريع الموجودة وتكون قد
+            انتهيت من عملية رفع مشروعك ، وما عليك سوى إنتظار رسالة منا في حالة وجود مستثمر لمشروعك .
+          </p>
+          <div class="main-button">
+            <a href="{% url 'reservation' %}">إرفع مشروعك الان</a>
+          </div>
+        </div>
+    </center>
+      </div>
+    </div>
+  </div>
+
+
+  <div class="more-about" style="direction: rtl;">
+    <div class="container">
+      <div class="row">
+        <center>
+        <div class="col-lg-10">
+          <div class="section-heading">
+            <h2 style="text-align: center;padding: 10px;" id="promo">خطوات ترويج مشروعك على المنصة :</h2>
+            <p style="text-align: center;">لترويج مشروعك الذي سبق ونشرته في المنصة اتبع الخطوات الآتية :</p>
+          </div>
+          <div class="row">
+            <div class="col-lg-6">
+              <div class="info-item">
+                  <span>اولاً</span>
+                  <h4>الذهاب الى صفحة مشاريعي هناك يتواجد كل المشاريع التي قمت بإضافتهم الى المنصة .</h4>
+              </div>
+            </div>
+            <div class="col-lg-6">
+              <div class="info-item">
+                  <span>ثانياً</span>
+                <h4>إذهب الى المشروع الذي تود ترويجه ، انقر على زر ترويج المشروع وسينقلك الى صفحة طلب الترويج .</h4>
+              </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="info-item">
+                    <span>ثالثاً</span>
+                    <h4>اختار باقة الترويج التي تريدها وقم بادخال البيانات المطلوبة لاتمام عملية الدفع .</h4>
+                </div>
+              </div>
+              <div class="col-lg-6">
+                <div class="info-item">
+                    <span>رابعاً</span>
+                  <h4>بعد اتمامك الدفع سيتم التأكد من قبل ادارة الموقع وسيتم ترويج مشروعك على الصفحة  الرئيسية .</h4>
+                </div>
+              </div>
+          </div>
+          <p></p>
+          <div class="main-button">
+            <a href="{% url 'project' %}">مشاريعي</a>
+          </div>
+        </div>
+    </center>
+      </div>
+    </div>
+  </div>
+
+
+  <div class="more-about" style="direction: rtl;">
+    <div class="container">
+      <div class="row">
+        <center>
+        <div class="col-lg-10" id="edit">
+          <div class="section-heading">
+            <h2 style="text-align: center;padding: 10px;">خطوات تعديل مشروع سبق ونشرته على المنصة :</h2>
+            <p style="text-align: center;">في حالة اردت التعديل على مشروع سبق ونشرته على المنصة يمكنك إتباع الخطوات الآتية</p>
+          </div>
+          <div class="row">
+            <div class="col-lg-6">
+              <div class="info-item">
+                  <span>اولاً</span>
+                  <h4>الذهاب الى صفحة مشاريعي هناك يتواجد كل المشاريع التي قمت بإضافتهم الى المنصة .</h4>
+              </div>
+            </div>
+            <div class="col-lg-6">
+              <div class="info-item">
+                  <span>ثانياً</span>
+                <h4>إذهب الى المشروع الذي تود تعديله ، انقر على زر تعديل المشروع وسينقلك الى صفحة تعديل بيانات المشروع.</h4>
+              </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="info-item">
+                    <span>ثالثاً</span>
+                    <h4>قم بالتعديلات التي ترغب بها على مشروعك ، ويفضل ان تكون بيانات صالحة وموثوقة لضمان نجاح مشروع في الوصول الى المستثمرالمناسب .</h4>
+                </div>
+              </div>
+              <div class="col-lg-6">
+                <div class="info-item">
+                    <span>رابعاً</span>
+                  <h4>بعدها قم بالنقر على حفظ التعديلات ، وسيتم تطبيق التعديلات فوراً على مشروعك .</h4>
+                </div>
+              </div>
+          </div>
+          <p>ملاحظة مهمة : يتم مراجعة محتوى المشاريع من قبل موظفينا لضمان سلامة المعلومات من اي محتوى غير مناسب .</p>
+          <div class="main-button">
+            <a href="{% url 'project' %}">مشاريعي</a>
+          </div>
+        </div>
+    </center>
+      </div>
+    </div>
+  </div>
+
+
+
+
+{% endblock %}

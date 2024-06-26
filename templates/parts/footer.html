@@ -1,0 +1,141 @@
+
+
+
+<footer>
+  <div class="container">
+      <div class="row">
+          <div class="col-lg-12 text-center">
+              <div class="social-icons">
+                  <a href="https://www.facebook.com" target="_blank"><i class="fab fa-facebook-f"></i></a>
+                  <a href="https://www.twitter.com" target="_blank"><i class="fab fa-twitter"></i></a>
+                  <a href="https://www.instagram.com" target="_blank"><i class="fab fa-instagram"></i></a>
+                  <a href="https://www.linkedin.com" target="_blank"><i class="fab fa-linkedin-in"></i></a>
+              </div>
+              <div class="footer-links">
+                  <h2><a href="{% url 'about' %}">عن وصل</a></h2>
+                  <h2><a href="{% url 'twsl' %}">تواصل معنا</a></h2>
+                  <h2><a href="{% url 'index' %}">سياسة الخصوصية</a></h2>
+                  <h2><a href="{% url 'condations' %}">الشروط والأحكام</a></h2>
+              </div>
+              {% if user.profile.user_type == 'investor' %}
+              <div class="investor-message">
+                  <h3>مرحباً بالمستثمرين!</h3>
+                  <p>انضم إلى مجتمع وصل واستفد من الفرص الاستثمارية الواعدة. نحن هنا لدعمك في كل خطوة على الطريق.</p>
+                  <a href="{% url 'deals' %}" class="btn btn-primary">استكشف الفرص الاستثمارية</a>
+              </div>
+              {% endif %}
+              <p>جميع الحقوق محفوظة © 2024 وصل</p>
+          </div>
+      </div>
+  </div>
+</footer>
+
+<style>
+  footer {
+      background-color: #22b3c1;
+      color: aliceblue;
+      padding: 40px 0;
+  }
+
+  .social-icons {
+      margin-bottom: 20px;
+  }
+
+  .social-icons a {
+      margin: 0 15px;
+      color: aliceblue;
+      font-size: 30px;
+      transition: transform 0.3s, color 0.3s;
+  }
+
+  .social-icons a:hover {
+      color: #000000;
+      transform: scale(1.2);
+  }
+
+  .footer-links {
+      margin: 20px 0;
+  }
+
+  .footer-links h2 {
+      display: inline-block;
+      margin: 0 15px;
+      font-size: 18px;
+  }
+
+  .footer-links a {
+      color: aliceblue;
+      text-decoration: none !important;
+      transition: color 0.3s;
+  }
+
+  .footer-links a:hover {
+      color: #000000;
+  }
+
+  .investor-message {
+      margin: 40px 0;
+      padding: 20px;
+      border: 1px solid #000000;
+      border-radius: 10px;
+      background-color: #30595c;
+  }
+
+  .investor-message h3 {
+      color: #00aced;
+      margin-bottom: 20px;
+  }
+
+  .investor-message p {
+      font-size: 16px;
+      margin-bottom: 20px;
+  }
+
+  .investor-message .btn-primary {
+      color: #fff;
+      background-color: #00aced;
+      border-color: #00aced;
+      padding: 10px 20px;
+      border-radius: 5px;
+      text-decoration: none;
+      transition: background-color 0.3s, transform 0.3s;
+  }
+
+  .investor-message .btn-primary:hover {
+      background-color: #0084b4;
+      transform: scale(1.1);
+  }
+
+  footer p {
+      margin-top: 20px;
+  }
+
+  @media (max-width: 768px) {
+      .social-icons a {
+          font-size: 24px;
+          margin: 0 10px;
+      }
+
+      .footer-links h2 {
+          font-size: 16px;
+          margin: 0 10px;
+      }
+
+      footer .col-lg-12 {
+          text-align: center;
+      }
+
+      .investor-message p {
+          font-size: 14px;
+      }
+  }
+</style>
+
+<!-- Add Font Awesome for social icons -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
+
+
+
+
+

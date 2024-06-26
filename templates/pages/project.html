@@ -1,0 +1,124 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+project
+{% endblock %}
+
+{% block content %}
+<div class="second-page-heading">
+    <div class="container">
+      <div class="row">
+
+      </div>
+    </div>
+  </div>
+
+  <div class="more-info reservation-info">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-4 col-sm-6">
+          <div class="info-item">
+            <i class="fa fa-phone"></i>
+            <div class="main-button">
+              <a href="{% url 'twsl' %}" style="color: black;">قم بالتواصل معنا</a>
+              </div>
+          </div>
+        </div>
+        <div class="col-lg-4 col-sm-6">
+          <div class="info-item">
+            <i class="fa fa-usd"></i>
+            <h4>احصل على تمويل ومساهمين لمشروعك</h4>
+            <a href="#"></a>
+          </div>
+        </div>
+        <div class="col-lg-4 col-sm-6">
+          <div class="info-item">
+            <i class="fa fa-upload"></i>
+            <div class="main-button">
+              <a href="{% url 'reservation' %}" style="color: black;">قم برفع مشروعك من اي مكان</a>
+              </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+ 
+  <!--من هنا-->
+  <div class="amazing-deals">
+    <div class="container">
+      <div class="row">
+        {% for project in projects %}
+        <div class="col-lg-6 col-sm-6" style=" background-color: #ddd6d6; margin-bottom: 20px;">
+          <div class="card h-100" style="margin-bottom: 20px;">
+            <div class="row" style="padding: 10px;">
+              <div class="col-lg-6">
+                {% if project.image %}
+                <div class="image" style="background-image: url('{{ project.image.url }}'); background-size: cover; background-position: center center; height: 300px;"></div>
+                {% endif %}
+              </div>
+              <div class="col-lg-6 align-self-center">
+                <div class="content" style="direction: rtl; padding-bottom: 5%;">
+                  <span class="info" style="color: #0094f7; font-size: 20px;">اسم المشروع: {{ project.title }}</span>
+                  <h4 style="padding-top: 10%; font-size: 20px;">سعر المشروع: {{ project.cost }}</h4>
+                  <div class="row" style="color: #0077ff;">
+                    <div class="col-12">
+                      <i class="fa fa-clock" style="font-size: 20px;"></i>
+                      <span class="list" style="font-size: 20px;">تصنيف المشروع: {{ project.category }}</span>
+                    </div>
+                    <div class="col-12">
+                      <i class="fa fa-map" style="font-size: 20px;"></i>
+                      <span class="list" style="font-size: 20px;">عنوان المشروع: {{ project.address }}</span>
+                    </div>
+                    <div class="col-12">
+                      <i class="fa fa-map" style="font-size: 20px;"></i>
+                      <span class="list" style="font-size: 20px;">وصف المشروع: {{ project.discripe }}</span>
+                    </div>
+                  </div>
+                  <p style="font-size: 16px; padding-top: 20px;">تفاصيل المشروع: {{ project.details }}</p>
+                  <div class="main-button" style="padding-top: 20px;">
+                    <a href="{% url 'promoreq' project.id %}">الاعلان على المشروع</a>
+                    <a href="{% url 'edit' project.id %}">تعديل</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+  <!--الى هنا-->
+  
+  
+  
+  
+  
+
+  </div>
+   
+    <style>
+      /* تنسيق الديف */
+      .my-container {
+        text-align: center; /* لتوسيط الزر داخل الديف */
+      }
+
+
+
+      
+      
+      
+       .my-button:hover {
+        background-color: #cccaca; /* لون الخلفية (أحمر غامق) عند التحويل */
+        border-color: #000000; /* لون الحدود (أحمر غامق) عند التحويل */
+      }
+    </style>
+  
+    <!-- الديف الذي يحتوي على الزر -->
+    <br> <br> <br>
+   
+    
+
+  {% endblock %}

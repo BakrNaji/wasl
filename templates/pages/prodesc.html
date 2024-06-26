@@ -1,0 +1,247 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+reservation
+{% endblock %}
+
+{% block content %}
+<div class="second-page-heading">
+    <div class="container">
+        <div class="row">
+            <!-- <div class="col-lg-12">
+              <h4>Book Prefered Deal Here</h4>
+              <h2>Make Your Reservation</h2>
+              <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt uttersi labore et dolore magna aliqua is ipsum suspendisse ultrices gravida</p>
+              <div class="main-button"><a href="about.html">Discover More</a></div>
+            </div> -->
+        </div>
+    </div>
+</div>
+
+<div class="more-info reservation-info">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-4 col-sm-6">
+          <div class="info-item">
+            <i class="fa fa-phone"></i>
+            <a href="#775999573"> <h4>قم بالتواصل معناء : 775999573</h4></a>
+          </div>
+        </div>
+        <div class="col-lg-4 col-sm-6">
+          <div class="info-item">
+            <i class="fa fa-envelope"></i>
+            <a href="{% url 'twsl' %}"><h4>مراسلتنا</h4></a>
+          </div>
+        </div>
+        <div class="col-lg-4 col-sm-6">
+          <div class="info-item">
+            <i class="fa fa-map-marker"></i>
+            <a href="{% url 'index' %}"> <h4> المزيد من المشاريع</h4></a>
+          </div>
+        </div>
+      </div>
+    </div>
+</div>
+<div class="reservation-form">
+    <div class="container">
+        {% for investment_request in investment_requests %}
+            {% if investment_request.investor.user == request.user and investment_request.is_allowed %}
+                <div class="col-lg-6 col-sm-6" style="border: 2px solid #043f44; background-color: #f8f9fa; margin: 20px auto; padding: 20px; border-radius: 10px; box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);">
+                    <div class="item">
+                        <div class="row">
+                            <div class="col-lg-6" style="padding: 0;">
+                                <div class="image" style="background-image: url('{{ investment_request.project.image.url }}'); background-size: cover; background-position: center; height: 200px; border-radius: 10px;"></div>
+                            </div>
+                            <div class="col-lg-6 align-self-center" style="padding: 20px;">
+                                <div class="content" style="direction: rtl;">
+                                    <form method="POST" action="{% url 'prodesc' %}">
+                                        {% csrf_token %}
+                                        <input type="hidden" name="investor" value="{{investment_request.investor.id}}"/>
+                                        <input type="hidden" name="project" value="{{investment_request.project.id}}"/>
+                                        <div style="text-align: center; margin-bottom: 20px;">
+                                            <button type="submit" style="font-size: 14px; color: #fff; background-color: #22b3c1; border: none; border-radius: 25px; padding: 10px 20px;">المفضلة</button>
+                                        </div>
+                                    </form>
+                                    <span class="info" style="color: #0094f7; font-size: 20px; display: block; margin-bottom: 10px;">اسم المشروع: {{ investment_request.project.title }}</span>
+                                    <h4 style="font-size: 16px; margin-bottom: 10px;">تكلفة المشروع: {{ investment_request.project.cost }}</h4>
+                                    <div class="row" style="color: #0077ff; margin-bottom: 10px;">
+                                        <div class="col-6">
+                                            <i class="fa fa-clock" style="font-size: 16px; margin-right: 5px;"></i>
+                                            <span class="list" style="font-size: 14px;">تصنيف المشروع: {{ investment_request.project.category }}</span>
+                                        </div>
+                                        <div class="col-6">
+                                            <i class="fa fa-map" style="font-size: 16px; margin-right: 5px;"></i>
+                                            <span class="list" style="font-size: 14px;">عنوان المشروع: {{ investment_request.project.address }}</span>
+                                        </div>
+                                    </div>
+                                    <div style="margin-bottom: 10px;">
+                                        <i class="fa fa-info-circle" style="font-size: 16px; margin-right: 5px;"></i>
+                                        <span class="list" style="font-size: 14px; word-wrap: break-word;">وصف المشروع: {{ investment_request.project.discripe }}</span>
+                                    </div>
+                                    <div>
+                                        <span class="list">
+                                            <p style="font-size: 14px; word-wrap: break-word; margin-bottom: 10px;">تفاصيل المشروع: {{ investment_request.project.details }}</p>
+                                        </span>
+                                    </div>
+                                    <div style="margin-bottom: 20px; padding: 15px; background-color: #f1f1f1; border-radius: 10px; box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);">
+                                        <p style="font-size: 16px; font-weight: bold; color: #333; margin-bottom: 10px;">تفاصيل مالك المشروع</p>
+                                        <p style="font-size: 14px; margin-bottom: 8px;">
+                                            <strong style="color: #555;">اسم مالك المشروع:</strong> 
+                                            <span style="color: #000;">{{ investment_request.project.owner.user }}</span>
+                                        </p>
+                                        <p style="font-size: 14px; margin-bottom: 8px;">
+                                            <strong style="color: #555;">رقم الهاتف:</strong> 
+                                            <a href="tel:{{ investment_request.project.owner.phone }}" style="color: #007bff; text-decoration: none;">{{ investment_request.project.owner.phone }}</a>
+                                        </p>
+                                        <p style="font-size: 14px; margin-bottom: 0;">
+                                            <strong style="color: #555;">البريد الإلكتروني:</strong> 
+                                            <a href="mailto:{{ investment_request.project.owner.user.email }}" style="color: #007bff; text-decoration: none;">{{ investment_request.project.owner.user.email }}</a>
+                                        </p>
+                                    </div>
+                                    
+                                    <form method="POST" action="{% url 'prodesc' %}">
+                                        {% csrf_token %}
+                                        <input type="hidden" name="project_id" value="{{ investment_request.project.id }}">
+                                        <input type="hidden" name="investment_request_id" value="{{ investment_request.id }}">
+                                        <div style="margin-bottom: 10px;">
+                                            <label for="rating" style="font-weight: bold;">التقييم:</label><br>
+                                            <input type="number" id="rating" name="rating" min="1" max="5" required style="padding: 5px; width: 50px;" {% if investment_request.is_project_rated %}disabled{% endif %}>
+                                        </div>
+                                        <div style="margin-bottom: 10px;">
+                                            <label for="comment" style="font-weight: bold;">التعليق:</label><br>
+                                            <textarea id="comment" name="comment" rows="4" cols="50" required style="padding: 10px; width: 100%; border-radius: 5px; border: 1px solid #ccc;"></textarea>
+                                        </div>
+                                        <div style="text-align: center;">
+                                            <button type="submit" style="padding: 10px 20px; background-color: #007bff; color: #fff; border: none; border-radius: 5px; cursor: pointer;">حفظ</button>
+                                        </div>
+                                    </form>
+                                
+
+                                    
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
+        {% endfor %}
+    </div>
+</div>
+
+   </div>
+    <style>
+        /* تنسيق تحريك الصور */
+
+        .slideshow-containere {
+            max-width: 100%;
+            position: relative;
+            margin: auto;
+            height: 400px;
+            
+            
+            
+        }
+
+    .mySlides {
+        display: none;
+        height: 1000px;
+    }
+
+    image {
+        width: 100%;
+        height: 700;
+    }
+
+    /* تنسيق الديف */
+    .my-container {
+        text-align: center; /* لتوسيط الزر داخل الديف */
+    }
+
+    /* تنسيق زر البوتون */
+    .my-button:hover {
+        background-color: #cccaca; /* لون الخلفية (أحمر غامق) عند التحويل */
+        border-color: #000000; /* لون الحدود (أحمر غامق) عند التحويل */
+    }
+
+    .form-group {
+        margin-bottom: 20px;
+    }
+
+    label {
+        font-weight: bold;
+    }
+
+    input[type="text"],
+    textarea {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+    }
+
+    button {
+        background-color: #007bff;
+        color: #fff;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+
+    button:hover {
+        background-color: #0056b3;
+    }
+</style>
+
+<!-- الديف الذي يحتوي على الزر -->
+<br> <br> <br>
+<!-- 
+<script>
+    let slideIndex = 0;
+
+    function showSlides() {
+        let i;
+        const slides = document.getElementsByClassName("mySlides");
+        for (i = 0; i < slides.length; i++) {
+            slides[i].style.display = "none";
+        }
+        slideIndex++;
+        if (slideIndex > slides.length) {
+            slideIndex = 1;
+        }
+        slides[slideIndex - 1].style.display = "block";
+        setTimeout(showSlides, 2000); // التحول كل 2 ثانية
+    }
+
+    showSlides();
+</script> -->
+<!-- <script>
+    // قم بتعيين متغير لتخزين حالة إرسال النموذج
+    var formSubmitted = false;
+
+    // اعثر على النموذج
+    var form = document.querySelector('form');
+
+    // استمع لحدث إرسال النموذج
+    form.addEventListener('submit', function() {
+        // ضع قيمة المتغير لتشير إلى إرسال النموذج
+        formSubmitted = true;
+    });
+
+    // استمع لحدث تحميل الصفحة
+    window.addEventListener('load', function() {
+        // اعثر على حقول النموذج التي تحتوي على البيانات
+        var ratingField = document.getElementById('rating');
+        var commentField = document.getElementById('comment');
+
+        // إعطاء كل حقل قيمة تعطيل إذا تم إرسال النموذج بالفعل
+        if (formSubmitted) {
+            ratingField.disabled = true;
+            commentField.disabled = true;
+        }
+    });
+</script> -->
+
+
+{% endblock %}

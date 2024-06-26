@@ -1,0 +1,30 @@
+{% load static %}
+
+<!-- {% for msg in messages %}
+
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+{{msg}}
+
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="close"></button>
+        </div>
+
+        {% endfor %} -->
+
+
+<!-- الكود السابق :-
+ملاحظة:الاثنين شغالين -->
+        {% if messages %}
+        {% for msg in messages %}
+        <div class="alert alert-{{msg.tags}} alert-dismissible fade show" role="alert">
+            <strong>
+                {% if 'danger' == msg.tags %}
+                    Error
+                {% else %}
+                    {{msg.tags}}
+                {% endif %}
+                :</strong>
+            {{msg}}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        {% endfor %}
+{% endif %}

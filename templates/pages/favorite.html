@@ -1,0 +1,73 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<div class="call-to-action" style="margin-top: 70px;">
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-8">
+        <h2> مشاريعك المفضلة </h2>
+        <h1> قم بالاستثمار في المزيد من المشاريع </h1>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="amazing-deals">
+    <div class="container">
+      <div class="row">
+        {% for favorite in favorite %} 
+        <div class="col-lg-6 col-sm-6" style="border: 2px solid #043f44; background-color: #f8f9fa; margin: 20px auto; padding: 20px; border-radius: 10px; box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);">
+          <div class="item">
+            <div class="row">
+              <div class="col-lg-6" style="padding: 0;">
+                <div class="image" style="background-image: url('{{ favorite.project.image.url }}'); background-size: cover; background-position: center; height: 200px; border-radius: 10px;">
+                  
+                </div>
+              </div>
+              <div class="col-lg-6 align-self-center" style="padding: 0;">
+                <div class="content" style="direction: rtl;">
+                  <span class="info" style="color: #0094f7; font-size: 20px; display: block; margin-bottom: 10px;"> اسم المشروع:{{ favorite.project.title }}  </span>
+                  <h4 style="font-size: 16px; margin-bottom: 10px;"> تكلفة المشروع: {{ favorite.project.cost }} </h4>                 
+
+                  <div class="row" style="color: #0077ff; margin-bottom: 10px;">
+                    <div class="col-6">
+                      <i class="fa fa-clock" style="font-size: 16px; margin-right: 5px; color: #0077ff;"></i>
+                      <span class="list" style="font-size: 14px; color: #0077ff;"> تصنيف المشروع : {{ favorite.project.category }} </span>
+                      
+                    </div>
+                    <div class="col-6">
+                      <i class="fa fa-map" style="font-size: 16px; margin-right: 5px; color: #0077ff;"></i>
+                      <span class="list" style="font-size: 14px; color: #0077ff;"> عنوان المشروع   : {{ favorite.project.address }} </span>
+                    </div>
+                  </div>
+                  <div class="margin-bottom: 10px;">
+                    <i class="fa fa-info-circle" style="color: #000; font-size: 16px; margin-right: 5px;"></i>
+                    <span class="list" style="color: #000; font-size: 14px; word-wrap: break-word;">  وصف المشروع:  {{ favorite.project.discripe }} </span>
+                  </div>
+                  
+                  <div class="main-button">
+                    
+                  </div>
+                 <div class="main-button">
+                  <form method="POST" action="{% url 'favorite' %}">
+                    {% csrf_token %}
+                    <input type="hidden" name="project_id" value="{{ favorite.project.id }}">
+                    <button type="submit" style="font-size: 14px;
+                    color: #fff;
+                    background-color: #22b3c1;
+                    border: 1px solid #22b3c1;
+                    display: inline-block;
+                    border-radius: 25px;
+                    padding-left: 0px; width: 170px; height:50px" class="main-button">حذف من المفضلة</button>
+                  </form>
+                 </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        {%endfor %}
+      </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+
+{% block title %}
+إرسال رسالة جديدة
+{% endblock %}
+
+{% block content %}
+<div class="send-message-page">
+    <h2>إرسال رسالة جديدة إلى المشروع: {{ feasibility_study.project_name }}</h2>
+    <form method="post" class="send-message-form">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="send-button">إرسال</button>
+    </form>
+    <a class="back-to-chat-button" href="{% url 'chat_list' feasibility_study.id %}">العودة إلى الدردشة</a>
+</div>
+
+<style>
+.send-message-page {
+    padding: 20px;
+}
+
+.send-message-form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    max-width: 500px;
+    margin: auto;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    background-color: #f9f9f9;
+}
+
+.send-message-form button.send-button {
+    padding: 10px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+}
+
+.send-message-form button.send-button:hover {
+    background-color: #0056b3;
+}
+
+.back-to-chat-button {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: #fff;
+    text-decoration: none;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+    margin-top: 20px;
+}
+
+.back-to-chat-button:hover {
+    background-color: #0056b3;
+}
+</style>
+{% endblock %}

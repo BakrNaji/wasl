@@ -1,0 +1,139 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+    <title>WoOx Travel Reservation Page</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="{% static 'vendor/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
+
+    <!-- Additional CSS Files -->
+    <link rel="stylesheet" href="{% static 'assets/css/fontawesome.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/css/templatemo-woox-travel.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/css/owl.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/css/animate.css' %}">
+    <link rel="stylesheet"href="https://unpkg.com/swiper@7/swiper-bundle.min.css"/>
+<!--
+
+TemplateMo 580 Woox Travel
+
+https://templatemo.com/tm-580-woox-travel
+
+-->
+  </head>
+
+<body>
+
+
+
+{% include 'parts/preloader.html' %}
+{% include 'parts/nav.html' %}
+
+<div class="reservation-form">
+    <div class="container">
+      <div class="row" style="direction: rtl;">
+        <div class="col-lg-12">
+          <center>
+          <div class="col-lg-12" style="background-color: #22b3c1; border-top-left-radius:30px; border-top-right-radius:30px;">
+            <h4>تعديل بياناتك الشخصية</h4>
+          </div>
+        </center>
+          {% if request.user.is_authenticated %}
+          <form id="reservation-form" method="POST">
+          {% csrf_token %}
+            {% include 'parts/_alerts.html' %}
+            <div class="row">
+              
+
+              <div class="col-lg-6">
+                  <fieldset>
+                      <label for="Name" class="form-label">الاسم الاول</label>
+                      <input type="text" name="fname" class="Name" placeholder="ادخل اسمك الاول" value="{{fname}}" required>
+                  </fieldset>
+              </div>
+              <div class="col-lg-6">
+                <fieldset>
+                    <label for="Name" class="form-label">الاسم الاخير</label>
+                    <input type="text" name="lname" class="Name" placeholder="ادخل اسمك الاخير" value="{{lname}}" required>
+                </fieldset>
+                </div>
+                
+    
+                  <div class="col-lg-6">
+                    <fieldset>
+                        <label for="Name" class="form-label">العنوان</label>
+                        <input type="text" name="address" required value="{{address}}">
+                    </fieldset>
+                    </div>
+                <div class="col-lg-6">
+                    <fieldset>
+                        <label for="Name" class="form-label">اسم المستخدم</label>
+                        <input type="text" name="user" class="Name" placeholder="ادخل اسم المستخدم" value="{{user}}" required readonly>
+                    </fieldset>
+                    </div>
+                    <div class="col-lg-6">
+                        <fieldset>
+                            <label for="Name" class="form-label">البريد الالكتروني</label>
+                            <input type="email" name="email" placeholder="name@example.com" required value="{{email}}" readonly>
+                        </fieldset>
+                        </div>
+              <!-- <div class="col-lg-6">
+                <fieldset>
+                    <label for="Number" class="form-label">رقم الهاتف</label>
+                    <input type="text" name="Number" class="Number" placeholder="7xxxxxxxx" autocomplete="on" required>
+                </fieldset>
+              </div> -->
+              <div class="border-button"><a href="{% url 'change_password' %}">تغيير كلمة المرور</a></div>
+              <div class="col-lg-12">                        
+                  <fieldset>
+                      <button type="submit" name="btnsave" class="main-button">حفظ التعديلات</button>
+                  </fieldset>
+              </div>
+            </div>
+          </form>
+          {% else %}
+          <h4 class="alert alert-danger">
+              يجب عليك 
+              <a href="{% url 'login' %}">
+                  تسجيل الدخول
+              </a>
+          </h4>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+
+{% include 'parts/footer.html' %}
+
+
+  <!-- Scripts -->
+  <!-- Bootstrap core JavaScript -->
+  <script src="{% static 'vendor/jquery/jquery.min.js' %}"></script>
+  <script src="{% static 'vendor/bootstrap/js/bootstrap.min.js' %}"></script>
+
+  <script src="{% static 'assets/js/isotope.min.js' %}"></script>
+  <script src="{% static 'assets/js/owl-carousel.js' %}"></script>
+  <script src="{% static 'assets/js/wow.js' %}"></script>
+  <script src="{% static 'assets/js/tabs.js' %}"></script>
+  <script src="{% static 'assets/js/popup.js' %}"></script>
+  <script src="{% static 'assets/js/custom.js' %}"></script>
+
+  <script>
+    $(".option").click(function(){
+      $(".option").removeClass("active");
+      $(this).addClass("active"); 
+    });
+  </script>
+
+  </body>
+
+</html>

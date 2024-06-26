@@ -1,0 +1,109 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+دردشة المشروع: {{ feasibility_study.project_name }}
+{% endblock %}
+
+{% block content %}
+<div class="chat-page">
+    <h2>دردشة المشروع: {{ feasibility_study.project_name }}</h2>
+    <div class="chat-container">
+        {% for chat in chats %}
+            <div class="chat-message{% if chat.admin %} admin-message{% endif %}">
+                <p>
+                    <strong>
+                        {% if chat.admin %}
+                            {{ chat.admin.username }}
+                        {% elif chat.owner %}
+                            {{ chat.owner.user.username }}
+                        {% elif chat.investor %}
+                            {{ chat.investor.user.username }}
+                        {% endif %}
+                    </strong>: {{ chat.text }}
+                </p>
+                {% if chat.admin_reply %}
+                    <p class="admin-reply"><strong>رد المدير:</strong> {{ chat.admin_reply }}</p>
+                {% endif %}
+                <p class="chat-date"><em>{{ chat.date }}</em></p>
+            </div>
+        {% endfor %}
+    </div>
+
+    <h3>إرسال رسالة جديدة</h3>
+    <form method="post" class="send-message-form">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="send-button">إرسال</button>
+    </form>
+</div>
+
+<style>
+.chat-page {
+    padding: 20px;
+    background-color: #fff;
+}
+
+.chat-container {
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    padding: 20px;
+    background-color: #f9f9f9;
+    max-height: 400px;
+    overflow-y: scroll;
+    margin-bottom: 20px;
+}
+
+.chat-message {
+    border-bottom: 1px solid #ddd;
+    padding: 10px 0;
+}
+
+.chat-message.admin-message {
+    background-color: #e9f7fd;
+}
+
+.chat-message p {
+    margin: 0;
+}
+
+.chat-message strong {
+    color: #007bff;
+}
+
+.admin-reply {
+    margin-top: 10px;
+    color: #333;
+}
+
+.chat-date {
+    font-size: 0.9em;
+    color: #999;
+}
+
+.send-message-form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    max-width: 500px;
+    margin: auto;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    background-color: #f9f9f9;
+}
+
+.send-message-form button.send-button {
+    padding: 10px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+}
+
+.send-message-form button.send-button:hover {
+    background-color: #0056b3;
+}
+</style>
+{% endblock %}

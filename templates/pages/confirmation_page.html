@@ -1,0 +1,76 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+نجاح طلب دراسة جدوى
+{% endblock %}
+
+{% block content %}
+
+<div class="reservation-form">
+    <div class="container">
+      <div class="row">
+       <center>
+        <div class="col-lg-6">
+          <div class="col-lg-12" style="background-color: #22b3c1; border-top-left-radius:30px; border-top-right-radius:30px;">
+            <h4>تم ارسال الطلب </h4>
+          </div>
+          
+    
+    <div class="confirmation-message">
+        <h2>شكراً لتقديم طلب دراسة الجدوى!</h2>
+        
+    <p>تم استلام طلبك بنجاح. سنتواصل معك قريبًا لمتابعة الطلب وإتمام عملية الدفع.</p>
+    </div>
+    
+
+        </div>
+       </center>
+      </div>
+      </div>
+    </div>
+
+<style>
+    
+/* 
+---------------------------------------------
+confirmation-message Page Style
+--------------------------------------------- 
+*/
+
+.confirmation-message {
+  padding: 70px;
+  font-family: Arial, sans-serif;
+  background-color: #f9f9f9;
+  
+  text-align: center;
+
+  margin-bottom: 0px;
+}
+
+h2 {
+    padding-bottom: 50px;
+}
+
+
+@media (max-width: 768px) {
+  .services-page {
+      padding: 10px;
+  }
+
+  .study-item,
+  .request-item {
+      padding: 15px;
+  }
+
+  .payment-image {
+      max-width: 80px;
+  }
+}
+/* 
+---------------------------------------------
+ end confirmation-message Page Style
+--------------------------------------------- 
+*/
+</style>
+{% endblock %}
