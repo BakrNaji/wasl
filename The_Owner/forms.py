@@ -100,6 +100,71 @@ class MessageForm(forms.ModelForm):
         return name
 
 
+from django import forms
+from The_Investor.models import Evaluation, EvaluationCriterion, Branch, Department
+from django.conf import settings
+
+
+class EvaluationForm(forms.ModelForm):
+    images = forms.FileField(required=False)
+
+    class Meta:
+        model = Evaluation
+        fields = ['department', 'branch', 'comment']
+        labels = {
+            'department': 'القسم',
+            'branch': 'الفرع',
+            'comment': 'ملاحظات',
+        }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        # branch/department as admin-managed selects
+        self.fields['branch'] = forms.ModelChoiceField(queryset=Branch.objects.all(), required=False, empty_label='-- اختر فرع --')
+        # set department queryset filtered by selected branch when possible
+        dept_qs = Department.objects.all()
+        # check bound data first
+        selected_branch_id = None
+        try:
+            if self.data and self.data.get('branch'):
+                selected_branch_id = int(self.data.get('branch'))
+        except Exception:
+            selected_branch_id = None
+        # if initial passed or instance has branch, try to use it
+        if not selected_branch_id:
+            init_branch = self.initial.get('branch') if hasattr(self, 'initial') else None
+            if isinstance(init_branch, Branch):
+                selected_branch_id = init_branch.id
+            elif isinstance(init_branch, int):
+                selected_branch_id = init_branch
+        if selected_branch_id:
+            dept_qs = Department.objects.filter(branch_id=selected_branch_id)
+        self.fields['department'] = forms.ModelChoiceField(queryset=dept_qs, required=False, empty_label='-- اختر قسم --')
+
+        # dynamically add fields for active criteria
+        criteria = EvaluationCriterion.objects.filter(active=True)
+        scale = getattr(settings, 'EVAL_SCALE', 5)
+        for c in criteria:
+            field_name = f'criterion_{c.id}'
+            # use integer inputs between 1 and scale
+            self.fields[field_name] = forms.IntegerField(label=c.name, min_value=1, max_value=scale, initial=max(1, scale // 2), required=False)
+            # attach criterion id for later processing
+            self.fields[field_name].criterion = c
+
+    def save(self, commit=True):
+        # override to convert selected Branch/Department to their names (Evaluation model stores strings)
+        ev = super().save(commit=False)
+        branch_obj = self.cleaned_data.get('branch')
+        dept_obj = self.cleaned_data.get('department')
+        if branch_obj:
+            ev.branch = branch_obj.name
+        if dept_obj:
+            ev.department = dept_obj.name
+        if commit:
+            ev.save()
+        return ev
+
+
 # from django import forms
 # from .models import ProjectRating
 

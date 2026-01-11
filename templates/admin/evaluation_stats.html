@@ -1,0 +1,67 @@
+{% extends "admin/base_site.html" %}
+{% load static %}
+
+{% block content %}
+<h1>إحصائيات التقييمات</h1>
+<div class="module">
+  <h2>متوسط التقييم حسب القسم</h2>
+  <canvas id="deptChart" width="600" height="200"></canvas>
+</div>
+
+<div class="module">
+  <h2>متوسط التقييم حسب الفرع</h2>
+  <ul>
+    {% for b in avg_by_branch %}
+      <li>{{ b.investor__branch }} — متوسط: {{ b.avg|floatformat:2 }} (عدد: {{ b.count }})</li>
+    {% empty %}
+      <li>لا توجد بيانات</li>
+    {% endfor %}
+  </ul>
+</div>
+
+<div class="module">
+  <h2>أقل 10 موظفين</h2>
+  <ol>
+    {% for p in lowest_employees %}
+      <li>{{ p.investor__user__username }} — متوسط: {{ p.avg|floatformat:2 }} — القسم: {{ p.investor__department }}</li>
+    {% empty %}
+      <li>لا توجد بيانات</li>
+    {% endfor %}
+  </ol>
+</div>
+
+<div class="module">
+  <h2>الانحرافات (Outliers)</h2>
+  <ul>
+    {% for o in outliers %}
+      <li>{{ o.investor }} — القسم: {{ o.dept }} — متوسط: {{ o.avg|floatformat:2 }} — z: {{ o.z }}</li>
+    {% empty %}
+      <li>لا توجد انحرافات بارزة</li>
+    {% endfor %}
+  </ul>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+  const ctx = document.getElementById('deptChart').getContext('2d');
+  const labels = {{ chart_labels|safe }};
+  const data = {{ chart_data|safe }};
+  new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: labels,
+      datasets: [{
+        label: 'متوسط التقييم',
+        data: data,
+        backgroundColor: 'rgba(54, 162, 235, 0.6)'
+      }]
+    },
+    options: {
+      scales: {
+        y: { beginAtZero: true }
+      }
+    }
+  });
+</script>
+
+{% endblock %}

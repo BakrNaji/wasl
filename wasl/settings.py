@@ -289,4 +289,7 @@ EMAIL_HOST_PASSWORD ='dsgg peya ihwl cjkd'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 DEFAULT_FORM_EMAIL = 'WASL Team <wasl@wasl.com>'
+# Evaluation configuration: scale (1-5 or 1-10) and recent-evaluation window (days)
+EVAL_SCALE = 5
+EVAL_WINDOW_DAYS = 30
 

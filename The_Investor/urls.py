@@ -1,3 +1,9 @@
+from django.urls import path
+from . import views
+
+urlpatterns = [
+    path('manager/evaluations/', views.manager_evaluations, name='manager_evaluations'),
+]
 # # في ملف urls.py لتطبيق The_Investor
 # from django.urls import path
 # from . import views

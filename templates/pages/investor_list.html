@@ -1,0 +1,258 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}قائمة الموظفين{% endblock %}
+
+{% block content %}
+<div style="height:70px"></div>
+
+<section class="abyati-section" dir="rtl">
+  <div class="container">
+    <div class="text-center mb-5">
+      <h2 class="section-title" style="font-size:32px; margin-bottom:10px;">🎯 نظام التقييم</h2>
+      <p class="section-desc" style="font-size:16px; color:#666;">اختر نوع التقييم الذي تريده</p>
+    </div>
+
+    <!-- خيارات التقييم -->
+    <div class="row g-4 mb-5">
+      <div class="col-md-6">
+        <a href="{% url 'evaluate_department' %}" class="text-decoration-none">
+          <div class="evaluation-option-card" style="background: linear-gradient(135deg, #235E88 0%, #3a7ca5 100%); color: white; padding: 40px; border-radius: 15px; text-align: center; cursor: pointer; transition: all 0.3s; box-shadow: 0 4px 15px rgba(35,94,136,0.3);"
+               onmouseover="this.style.transform='translateY(-8px)'; this.style.boxShadow='0 8px 25px rgba(35,94,136,0.4)';"
+               onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 15px rgba(35,94,136,0.3)';">
+            <div style="font-size: 60px; margin-bottom: 20px;">🏢</div>
+            <h3 style="margin-bottom: 15px; font-weight: bold;">تقييم قسم</h3>
+            <p style="margin: 0; opacity: 0.9; font-size: 15px;">قيّم أداء قسم كامل بناءً على المعايير المحددة</p>
+          </div>
+        </a>
+      </div>
+      <div class="col-md-6">
+        <a href="{% url 'evaluate_employee' %}" class="text-decoration-none">
+          <div class="evaluation-option-card" style="background: linear-gradient(135deg, #F2A23F 0%, #f5b35a 100%); color: white; padding: 40px; border-radius: 15px; text-align: center; cursor: pointer; transition: all 0.3s; box-shadow: 0 4px 15px rgba(242,162,63,0.3);"
+               onmouseover="this.style.transform='translateY(-8px)'; this.style.boxShadow='0 8px 25px rgba(242,162,63,0.4)';"
+               onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 15px rgba(242,162,63,0.3)';">
+            <div style="font-size: 60px; margin-bottom: 20px;">👤</div>
+            <h3 style="margin-bottom: 15px; font-weight: bold;">تقييم موظف</h3>
+            <p style="margin: 0; opacity: 0.9; font-size: 15px;">قيّم أداء موظف محدد وارفق الملاحظات بالصور</p>
+          </div>
+        </a>
+      </div>
+    </div>
+
+    <hr style="margin: 50px 0; border: 2px solid #235E88; opacity: 0.2;">
+
+    <!-- القائمة الحالية للموظفين -->
+    <div class="text-center mb-4">
+      <h3 style="color:#235E88; font-weight:600;">📋 أو اختر موظف مباشرة من القائمة</h3>
+    </div>
+
+    <div class="card p-4 mb-5" style="border: 2px solid #235E88; border-radius:12px; background:#f8fbfd;">
+      <h5 style="color:#235E88; margin-bottom:20px; font-weight:600;">🔍 خطوات الفلترة:</h5>
+      <form method="get" class="row g-3 align-items-end">
+        <div class="col-md-4">
+          <label class="form-label" style="font-weight:600; color:#235E88;">📍 اختر الفرع</label>
+          <select name="branch" id="branch-select" class="form-select" style="border: 2px solid #235E88; padding:10px; font-size:15px;">
+            <option value="">-- جميع الفروع --</option>
+            {% for b in branches %}
+              <option value="{{ b.id }}" {% if request.GET.branch == b.id|stringformat:"s" %}selected{% endif %}>{{ b.name }}</option>
+            {% endfor %}
+          </select>
+        </div>
+
+        <div class="col-md-4">
+          <label class="form-label" style="font-weight:600; color:#235E88;">🏢 اختر القسم</label>
+          <select name="department" id="department-select" class="form-select" data-selected-department="{{ request.GET.department|default_if_none:'' }}" style="border: 2px solid #235E88; padding:10px; font-size:15px;">
+            <option value="">-- جميع الأقسام --</option>
+            <!-- options filled by AJAX when branch selected -->
+          </select>
+          <small id="dept-info" style="color:#666; margin-top:5px; display:block;">اختر فرعاً أولاً</small>
+        </div>
+
+        <div class="col-md-4">
+          <label class="form-label" style="font-weight:600; color:#235E88;">👤 اختر الموظف من القائمة</label>
+          <select name="investor_id" id="investor-select" class="form-select" data-selected-investor="{{ request.GET.investor_id|default_if_none:'' }}" style="border: 2px solid #F2A23F; padding:10px; font-size:15px;">
+            <option value="">-- اختر موظفاً --</option>
+            {% for inv_select in all_investors %}
+              <option value="{{ inv_select.id }}">{{ inv_select.user.username }} — {{ inv_select.department }} / {{ inv_select.branch }}</option>
+            {% endfor %}
+          </select>
+        </div>
+      </form>
+    </div>
+
+    <h4 style="color:#235E88; margin:30px 0 20px 0; font-weight:600;">📊 قائمة الموظفين المتاحين:</h4>
+    <div class="row g-4">
+      {% for inv in investors %}
+        <div class="col-md-6 col-lg-4">
+          <div class="branch-card" style="cursor:pointer; transition:all 0.3s ease; border:3px solid transparent; border-radius:12px; overflow:hidden; box-shadow:0 2px 8px rgba(0,0,0,0.1); background:#fff;" 
+               onmouseover="this.style.borderColor='#235E88'; this.style.transform='translateY(-5px)'; this.style.boxShadow='0 6px 16px rgba(35,94,136,0.2)';"
+               onmouseout="this.style.borderColor='transparent'; this.style.transform='translateY(0)'; this.style.boxShadow='0 2px 8px rgba(0,0,0,0.1)';">
+            <div class="branch-badge" style="background:#235E88; color:#fff; padding:10px; font-weight:600; text-align:center;">📍 {{ inv.branch|default:'---' }}</div>
+            <div style="padding:15px;">
+              <h4 class="branch-title" style="color:#235E88; margin:10px 0; font-size:18px;">👤 {{ inv.user.username }}</h4>
+              <p class="branch-desc" style="color:#666; margin:10px 0; font-size:14px;">🏢 {{ inv.department|default:'---' }}</p>
+              {% if inv.job_title %}<p style="color:#888; margin:5px 0; font-size:13px;">💼 {{ inv.job_title }}</p>{% endif %}
+              <div class="branch-meta" style="margin-top:15px; display:flex; gap:8px;">
+                <a href="{% url 'evaluate_investor' inv.id %}" class="btn-abyati primary" style="flex:1; text-align:center; padding:10px; background:#235E88; color:#fff; border-radius:6px; text-decoration:none; font-weight:600; transition:all 0.2s;">⭐ تقييم الآن</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      {% empty %}
+        <div class="col-12">
+          <div style="background:#fff3cd; border:2px solid #ffc107; border-radius:8px; padding:20px; text-align:center;">
+            <p style="color:#856404; font-size:16px; margin:0;">⚠️ لا توجد موظفين متطابقين مع الفلترة الحالية</p>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<script>
+  (function(){
+    const branchSel = document.getElementById('branch-select');
+    const deptSel = document.getElementById('department-select');
+    const invSel = document.getElementById('investor-select');
+    const evalBase = "{% url 'evaluate_investor' 0 %}";
+    const evalPrefix = evalBase.replace(/0\/?$/, '');
+    const selectedDept = deptSel ? deptSel.dataset.selectedDepartment : '';
+    const selectedInv = invSel ? invSel.dataset.selectedInvestor : '';
+
+    function safeJson(res){
+      return res.ok ? res.json() : Promise.resolve([]);
+    }
+
+    function fetchDepartments(branchId, thenSelect){
+      if(!branchId){
+        deptSel.innerHTML = '<option value="">-- كل الأقسام --</option>';
+        return Promise.resolve([]);
+      }
+      return fetch(`{% url 'ajax_departments' 0 %}`.replace(/0\/?$/, branchId + '/'))
+        .then(safeJson)
+        .then(data => {
+          deptSel.innerHTML = '<option value="">-- كل الأقسام --</option>';
+          data.forEach(d => {
+            const opt = document.createElement('option');
+            opt.value = d.id;
+            opt.textContent = d.name;
+            deptSel.appendChild(opt);
+          });
+          if(thenSelect && selectedDept){
+            deptSel.value = selectedDept;
+          }
+          return data;
+        }).catch(() => []);
+    }
+
+    function fetchInvestors(branchId, deptId){
+      const url = new URL('{% url "ajax_investors" %}', window.location.origin);
+      if(branchId) url.searchParams.set('branch_id', branchId);
+      if(deptId) url.searchParams.set('department_id', deptId);
+      return fetch(url)
+        .then(safeJson)
+        .then(data => {
+          // populate select
+          invSel.innerHTML = '<option value="">-- اختر موظف --</option>';
+          data.forEach(inv => {
+            const opt = document.createElement('option');
+            opt.value = inv.id;
+            opt.textContent = `${inv.username} — ${inv.department} / ${inv.branch}`;
+            invSel.appendChild(opt);
+          });
+          if(selectedInv){
+            invSel.value = selectedInv;
+          }
+          // also update the displayed cards
+          const container = document.querySelector('.row.g-4');
+          if(container){
+            if(data.length === 0){
+              container.innerHTML = '<div class="col-12"><p class="text-center">لا يوجد مستثمرين</p></div>';
+            } else {
+              container.innerHTML = '';
+              data.forEach(inv => {
+                const col = document.createElement('div');
+                col.className = 'col-md-6 col-lg-4';
+                col.innerHTML = `
+  <div class="branch-card" style="cursor:pointer; transition:all 0.3s ease; border:3px solid transparent; border-radius:12px; overflow:hidden; box-shadow:0 2px 8px rgba(0,0,0,0.1); background:#fff;" 
+       data-inv-id="${inv.id}"
+       onmouseover="this.style.borderColor='#235E88'; this.style.transform='translateY(-5px)'; this.style.boxShadow='0 6px 16px rgba(35,94,136,0.2)';"
+       onmouseout="this.style.borderColor='transparent'; this.style.transform='translateY(0)'; this.style.boxShadow='0 2px 8px rgba(0,0,0,0.1)';">
+    <div class="branch-badge" style="background:#235E88; color:#fff; padding:10px; font-weight:600; text-align:center;">📍 ${inv.branch || '---'}</div>
+    <div style="padding:15px;">
+      <h4 class="branch-title" style="color:#235E88; margin:10px 0; font-size:18px;">👤 ${inv.username}</h4>
+      <p class="branch-desc" style="color:#666; margin:10px 0; font-size:14px;">🏢 ${inv.department || '---'}</p>
+      <div class="branch-meta" style="margin-top:15px; display:flex; gap:8px;">
+        <a href="/owner/edit-employee/${inv.id}/" class="btn-abyati secondary" style="flex:1; text-align:center; padding:10px; background:#17a2b8; color:#fff; border-radius:6px; text-decoration:none; font-weight:600; transition:all 0.2s;"><i class="fas fa-edit"></i> تعديل</a>
+        <a href="${evalPrefix}${inv.id}/" class="btn-abyati primary" style="flex:1; text-align:center; padding:10px; background:#235E88; color:#fff; border-radius:6px; text-decoration:none; font-weight:600; transition:all 0.2s;">⭐ تقييم</a>
+      </div>
+    </div>
+  </div>
+`;
+                container.appendChild(col);
+                // make whole card clickable
+                const card = col.querySelector('.branch-card');
+                if(card){
+                  card.addEventListener('click', function(e){
+                    // avoid clicking links inside
+                    if(e.target.tagName.toLowerCase() === 'a') return;
+                    window.location.href = `${evalPrefix}${inv.id}/`;
+                  });
+                }
+              });
+            }
+          }
+          return data;
+        }).catch(() => []);
+    }
+
+    // initialize on load if branch selected in GET
+    (function initOnLoad(){
+      const bval = branchSel ? branchSel.value : '';
+      const dval = (typeof selectedDept !== 'undefined') ? selectedDept : '';
+      if(bval){
+        fetchDepartments(bval, true).then(()=> fetchInvestors(bval, dval));
+      }
+    })();
+
+    if(branchSel){
+      branchSel.addEventListener('change', function(){
+        const bid = this.value;
+        // clear selected flags when user changes
+        if(deptSel) deptSel.dataset.selectedDepartment = '';
+        if(invSel) invSel.dataset.selectedInvestor = '';
+        if(bid){
+          document.getElementById('dept-info').textContent = '⏳ جاري تحميل الأقسام...';
+          document.getElementById('dept-info').style.color = '#235E88';
+        }
+        fetchDepartments(bid).then(()=> {
+          if(bid){
+            document.getElementById('dept-info').textContent = '✅ اختر قسماً';
+            document.getElementById('dept-info').style.color = '#28a745';
+          } else {
+            document.getElementById('dept-info').textContent = 'اختر فرعاً أولاً';
+            document.getElementById('dept-info').style.color = '#666';
+          }
+          fetchInvestors(bid, null);
+        });
+      });
+    }
+
+    if(deptSel){
+      deptSel.addEventListener('change', function(ev){
+        const bid = branchSel ? branchSel.value : null;
+        const did = this.value;
+        fetchInvestors(bid, did);
+      });
+    }
+
+    if(invSel){
+      invSel.addEventListener('change', function(){
+        const v = this.value;
+        if(!v) return;
+        window.location.href = `${evalPrefix}${v}/`;
+      });
+    }
+  })();
+</script>
+
+{% endblock %}

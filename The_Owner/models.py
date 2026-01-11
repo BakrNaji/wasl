@@ -139,3 +139,214 @@ class Message(models.Model):
 
 #     def __str__(self):
 #         return f"Rating for {self.project.title} by {self.user.username}"
+
+# ==================== نظام التقييم للأقسام والموظفين ====================
+
+class EvaluationCriterion(models.Model):
+    """معيار التقييم - مثل النظافة، الترتيب، إلخ"""
+    name = models.CharField(max_length=200, verbose_name='اسم المعيار')
+    max_observations = models.IntegerField(default=10, verbose_name='الحد الأقصى للملاحظات')
+    is_active = models.BooleanField(default=True, verbose_name='نشط')
+    order = models.IntegerField(default=0, verbose_name='الترتيب')
+    criterion_type = models.CharField(max_length=20, default='department', choices=[('department', 'قسم'), ('employee', 'موظف')], verbose_name='نوع المعيار')
+    
+    class Meta:
+        ordering = ['order', 'name']
+        verbose_name = 'معيار التقييم'
+        verbose_name_plural = 'معايير التقييم'
+    
+    def __str__(self):
+        return f"{self.name} ({self.get_criterion_type_display()})"
+
+
+class DepartmentEvaluation(models.Model):
+    """تقييم شهري لقسم"""
+    from The_Investor.models import Department, Branch
+    
+    department = models.ForeignKey(Department, on_delete=models.CASCADE, verbose_name='القسم')
+    month = models.DateField(verbose_name='الشهر')
+    evaluator = models.ForeignKey(Owner, on_delete=models.SET_NULL, null=True, verbose_name='المقيّم')
+    
+    # النتائج المحسوبة
+    total_observations = models.IntegerField(default=0, editable=False, verbose_name='إجمالي الملاحظات')
+    total_score = models.IntegerField(default=0, editable=False, verbose_name='إجمالي النقاط')
+    max_possible_score = models.IntegerField(default=0, editable=False, verbose_name='أقصى نقاط ممكنة')
+    percentage = models.DecimalField(max_digits=5, decimal_places=2, default=0, editable=False, verbose_name='النسبة المئوية')
+    
+    notes = models.TextField(blank=True, verbose_name='ملاحظات عامة')
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    
+    class Meta:
+        ordering = ['-month', 'department']
+        unique_together = ['department', 'month']
+        verbose_name = 'تقييم القسم'
+        verbose_name_plural = 'تقييمات الأقسام'
+    
+    def __str__(self):
+        return f"تقييم {self.department.name} - {self.month.strftime('%Y-%m')}"
+    
+    def calculate_totals(self):
+        """حساب الإجماليات"""
+        details = self.details.all()
+        
+        self.total_observations = sum(d.observations_count for d in details)
+        self.max_possible_score = sum(d.criterion.max_observations for d in details)
+        
+        # النقاط = الحد الأقصى - الملاحظات (كلما قلت الملاحظات كان أفضل)
+        self.total_score = self.max_possible_score - self.total_observations
+        
+        # النسبة المئوية
+        if self.max_possible_score > 0:
+            self.percentage = (self.total_score / self.max_possible_score) * 100
+        else:
+            self.percentage = 0
+    
+    def save(self, *args, **kwargs):
+        # حفظ أولاً للحصول على primary key
+        is_new = self.pk is None
+        super().save(*args, **kwargs)
+        # حساب الإجماليات بعد الحفظ فقط
+        if not is_new or self.pk:
+            self.calculate_totals()
+            if self.total_observations != 0 or self.total_score != 0:
+                # حفظ مرة أخرى لتحديث الإجماليات
+                super().save(update_fields=['total_observations', 'total_score', 'percentage'])
+
+
+class EvaluationObservation(models.Model):
+    """ملاحظة واحدة لمعيار معين"""
+    evaluation = models.ForeignKey(DepartmentEvaluation, on_delete=models.CASCADE, related_name='details', verbose_name='التقييم')
+    criterion = models.ForeignKey(EvaluationCriterion, on_delete=models.CASCADE, verbose_name='المعيار')
+    observations_count = models.IntegerField(default=0, verbose_name='عدد الملاحظات')
+    description = models.TextField(blank=True, verbose_name='وصف الملاحظات')
+    
+    class Meta:
+        ordering = ['criterion__order']
+        unique_together = ['evaluation', 'criterion']
+        verbose_name = 'ملاحظة التقييم'
+        verbose_name_plural = 'ملاحظات التقييم'
+    
+    def __str__(self):
+        return f"{self.criterion.name}: {self.observations_count} ملاحظة"
+    
+    def get_score(self):
+        """حساب النقاط لهذا المعيار"""
+        max_score = self.criterion.max_observations
+        return max(0, max_score - self.observations_count)
+    
+    def get_percentage(self):
+        """حساب النسبة لهذا المعيار"""
+        max_score = self.criterion.max_observations
+        if max_score > 0:
+            return (self.get_score() / max_score) * 100
+        return 0
+
+
+class ObservationImage(models.Model):
+    """صورة مرفقة مع ملاحظة"""
+    observation = models.ForeignKey(EvaluationObservation, on_delete=models.CASCADE, related_name='images', verbose_name='الملاحظة')
+    image = models.ImageField(upload_to='evaluation_observations/%Y/%m/%d/', verbose_name='الصورة')
+    caption = models.CharField(max_length=200, blank=True, verbose_name='وصف الصورة')
+    uploaded_at = models.DateTimeField(auto_now_add=True)
+    
+    class Meta:
+        verbose_name = 'صورة الملاحظة'
+        verbose_name_plural = 'صور الملاحظات'
+    
+    def __str__(self):
+        return f"صورة لـ {self.observation}"
+
+
+class EmployeeEvaluation(models.Model):
+    """تقييم شهري لموظف"""
+    from The_Investor.models import Investor
+    
+    employee = models.ForeignKey(Investor, on_delete=models.CASCADE, verbose_name='الموظف')
+    month = models.DateField(verbose_name='الشهر')
+    evaluator = models.ForeignKey(Owner, on_delete=models.SET_NULL, null=True, verbose_name='المقيّم')
+    
+    # النتائج المحسوبة
+    total_observations = models.IntegerField(default=0, editable=False, verbose_name='إجمالي الملاحظات')
+    total_score = models.IntegerField(default=0, editable=False, verbose_name='إجمالي النقاط')
+    max_possible_score = models.IntegerField(default=0, editable=False, verbose_name='أقصى نقاط ممكنة')
+    percentage = models.DecimalField(max_digits=5, decimal_places=2, default=0, editable=False, verbose_name='النسبة المئوية')
+    
+    notes = models.TextField(blank=True, verbose_name='ملاحظات عامة')
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    
+    class Meta:
+        ordering = ['-month', 'employee']
+        unique_together = ['employee', 'month']
+        verbose_name = 'تقييم الموظف'
+        verbose_name_plural = 'تقييمات الموظفين'
+    
+    def __str__(self):
+        return f"تقييم {self.employee.user.username} - {self.month.strftime('%Y-%m')}"
+    
+    def calculate_totals(self):
+        """حساب الإجماليات"""
+        details = self.details.all()
+        
+        self.total_observations = sum(d.observations_count for d in details)
+        self.max_possible_score = sum(d.criterion.max_observations for d in details)
+        self.total_score = self.max_possible_score - self.total_observations
+        
+        if self.max_possible_score > 0:
+            self.percentage = (self.total_score / self.max_possible_score) * 100
+        else:
+            self.percentage = 0
+    
+    def save(self, *args, **kwargs):
+        # حفظ أولاً للحصول على primary key
+        is_new = self.pk is None
+        super().save(*args, **kwargs)
+        # حساب الإجماليات بعد الحفظ فقط
+        if not is_new or self.pk:
+            self.calculate_totals()
+            if self.total_observations != 0 or self.total_score != 0:
+                # حفظ مرة أخرى لتحديث الإجماليات
+                super().save(update_fields=['total_observations', 'total_score', 'percentage'])
+
+
+class EmployeeObservation(models.Model):
+    """ملاحظة لتقييم موظف"""
+    evaluation = models.ForeignKey(EmployeeEvaluation, on_delete=models.CASCADE, related_name='details', verbose_name='التقييم')
+    criterion = models.ForeignKey(EvaluationCriterion, on_delete=models.CASCADE, verbose_name='المعيار')
+    observations_count = models.IntegerField(default=0, verbose_name='عدد الملاحظات')
+    description = models.TextField(blank=True, verbose_name='وصف الملاحظات')
+    
+    class Meta:
+        ordering = ['criterion__order']
+        unique_together = ['evaluation', 'criterion']
+        verbose_name = 'ملاحظة تقييم الموظف'
+        verbose_name_plural = 'ملاحظات تقييم الموظف'
+    
+    def __str__(self):
+        return f"{self.criterion.name}: {self.observations_count} ملاحظة"
+    
+    def get_score(self):
+        max_score = self.criterion.max_observations
+        return max(0, max_score - self.observations_count)
+    
+    def get_percentage(self):
+        max_score = self.criterion.max_observations
+        if max_score > 0:
+            return (self.get_score() / max_score) * 100
+        return 0
+
+
+class EmployeeObservationImage(models.Model):
+    """صورة مرفقة مع ملاحظة موظف"""
+    observation = models.ForeignKey(EmployeeObservation, on_delete=models.CASCADE, related_name='images', verbose_name='الملاحظة')
+    image = models.ImageField(upload_to='employee_observations/%Y/%m/%d/', verbose_name='الصورة')
+    caption = models.CharField(max_length=200, blank=True, verbose_name='وصف الصورة')
+    uploaded_at = models.DateTimeField(auto_now_add=True)
+    
+    class Meta:
+        verbose_name = 'صورة ملاحظة الموظف'
+        verbose_name_plural = 'صور ملاحظات الموظف'
+    
+    def __str__(self):
+        return f"صورة لـ {self.observation}"

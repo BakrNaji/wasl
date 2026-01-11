@@ -1,0 +1,164 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}تعديل موظف{% endblock %}
+
+{% block content %}
+<div class="container-fluid px-4">
+    <div class="row my-4">
+        <div class="col-12">
+            <div class="card shadow-lg border-0">
+                <div class="card-header bg-gradient-info text-white py-3">
+                    <h3 class="mb-0"><i class="fas fa-user-edit me-2"></i>تعديل بيانات الموظف</h3>
+                </div>
+                <div class="card-body p-4">
+                    <form method="POST">
+                        {% csrf_token %}
+                        
+                        <!-- معلومات الموظف -->
+                        <div class="row mb-4">
+                            <div class="col-md-12">
+                                <div class="alert alert-info">
+                                    <h5><i class="fas fa-user me-2"></i>الموظف: <strong>{{ employee.user.username }}</strong></h5>
+                                    <p class="mb-0">
+                                        <i class="fas fa-envelope me-2"></i>البريد: {{ employee.user.email|default:"غير محدد" }}
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <hr class="my-4">
+                        
+                        <!-- البيانات الحالية -->
+                        <div class="row mb-4">
+                            <div class="col-md-6">
+                                <div class="card bg-light">
+                                    <div class="card-body">
+                                        <h6 class="text-muted">الفرع الحالي</h6>
+                                        <p class="h5 mb-0">
+                                            {% if employee.branch %}
+                                            <i class="fas fa-building text-primary me-2"></i>{{ employee.branch.name }}
+                                            {% else %}
+                                            <span class="text-muted">غير محدد</span>
+                                            {% endif %}
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="col-md-6">
+                                <div class="card bg-light">
+                                    <div class="card-body">
+                                        <h6 class="text-muted">القسم الحالي</h6>
+                                        <p class="h5 mb-0">
+                                            {% if employee.department %}
+                                            <i class="fas fa-sitemap text-success me-2"></i>{{ employee.department.name }}
+                                            {% else %}
+                                            <span class="text-muted">غير محدد</span>
+                                            {% endif %}
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <hr class="my-4">
+                        
+                        <!-- التعديلات الجديدة -->
+                        <h5 class="mb-3"><i class="fas fa-edit me-2"></i>تحديث البيانات</h5>
+                        
+                        <div class="row mb-4">
+                            <div class="col-md-6">
+                                <label class="form-label fw-bold">اختر الفرع الجديد</label>
+                                <select id="branchSelect" name="branch" class="form-select form-select-lg">
+                                    <option value="">-- اختر فرع --</option>
+                                    {% for branch in branches %}
+                                    <option value="{{ branch.id }}" {% if employee.branch and employee.branch.id == branch.id %}selected{% endif %}>
+                                        {{ branch.name }}
+                                    </option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            
+                            <div class="col-md-6">
+                                <label class="form-label fw-bold">اختر القسم الجديد</label>
+                                <select id="departmentSelect" name="department" class="form-select form-select-lg">
+                                    <option value="">-- اختر قسم --</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div class="d-flex gap-2 mt-4">
+                            <button type="submit" class="btn btn-success btn-lg">
+                                <i class="fas fa-save me-2"></i>حفظ التعديلات
+                            </button>
+                            <a href="{% url 'investor_list' %}" class="btn btn-secondary btn-lg">
+                                <i class="fas fa-arrow-right me-2"></i>رجوع
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.bg-gradient-info {
+    background: linear-gradient(135deg, #17a2b8 0%, #138496 100%);
+}
+.card {
+    border-radius: 15px;
+}
+.card-header {
+    border-radius: 15px 15px 0 0 !important;
+}
+</style>
+
+<script>
+const departmentsByBranch = {};
+
+// تحميل الأقسام لكل فرع
+{% for branch in branches %}
+departmentsByBranch[{{ branch.id }}] = [
+    {% for dept in branch.departments.all %}
+    {id: {{ dept.id }}, name: "{{ dept.name|escapejs }}"}
+    {% if not forloop.last %},{% endif %}
+    {% endfor %}
+];
+{% endfor %}
+
+// عند تغيير الفرع
+document.getElementById('branchSelect').addEventListener('change', function() {
+    const branchId = this.value;
+    const deptSelect = document.getElementById('departmentSelect');
+    
+    deptSelect.innerHTML = '<option value="">-- اختر قسم --</option>';
+    
+    if (branchId && departmentsByBranch[branchId]) {
+        departmentsByBranch[branchId].forEach(dept => {
+            const option = document.createElement('option');
+            option.value = dept.id;
+            option.textContent = dept.name;
+            
+            // تحديد القسم الحالي إذا كان موجود
+            {% if employee.department %}
+            if (dept.id == {{ employee.department.id }}) {
+                option.selected = true;
+            }
+            {% endif %}
+            
+            deptSelect.appendChild(option);
+        });
+    }
+});
+
+// تشغيل عند تحميل الصفحة إذا كان هناك فرع محدد
+window.addEventListener('DOMContentLoaded', function() {
+    const branchSelect = document.getElementById('branchSelect');
+    if (branchSelect.value) {
+        branchSelect.dispatchEvent(new Event('change'));
+    }
+});
+</script>
+{% endblock %}

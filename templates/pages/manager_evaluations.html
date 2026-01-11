@@ -1,0 +1,40 @@
+{% load static %}
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>لوحة المدير - التقييمات</title>
+</head>
+<body>
+{% include 'parts/nav.html' %}
+<div class="container" style="padding:20px;">
+  <h3>التقييمات المعلقة</h3>
+  <ul>
+    {% for ev in pending %}
+      <li>
+        {{ ev.investor.user.username }} - {{ ev.department }} / {{ ev.branch }} - {{ ev.overall_score }}
+        <form method="post" style="display:inline-block;">
+          {% csrf_token %}
+          <input type="hidden" name="eval_id" value="{{ ev.id }}">
+          <button name="action" value="approve">اعتماد</button>
+          <button name="action" value="reject">رفض</button>
+        </form>
+      </li>
+    {% empty %}
+      <li>لا توجد تقييمات معلقة</li>
+    {% endfor %}
+  </ul>
+
+  <h4>متوسط التقييم حسب القسم</h4>
+  <ul>
+    {% for k,v in avg_by_dept.items %}
+      <li>{{ k }}: {{ v }}</li>
+    {% empty %}
+      <li>لا بيانات</li>
+    {% endfor %}
+  </ul>
+</div>
+{% include 'parts/footer.html' %}
+</body>
+</html>

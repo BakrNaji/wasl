@@ -1,0 +1,106 @@
+:root {
+  --brand-primary: #235E88; /* deep blue from logo */
+  --brand-secondary: #F2A23F; /* orange from logo */
+  --brand-accent: #0D3B5A; /* navy accent */
+}
+
+/* Global link and selection color */
+a, .text-button a {
+  color: var(--brand-primary) !important;
+}
+
+::selection {
+  background: var(--brand-primary) !important;
+  color: #fff !important;
+}
+
+/* Buttons */
+.border-button a {
+  color: var(--brand-primary) !important;
+  background-color: transparent !important;
+  border: 1px solid var(--brand-primary) !important;
+}
+.border-button a:hover {
+  background-color: var(--brand-primary) !important;
+  color: #fff !important;
+}
+
+.main-button a {
+  background-color: var(--brand-primary) !important;
+  border: 1px solid var(--brand-primary) !important;
+  color: #fff !important;
+}
+.main-button a:hover {
+  background-color: #fff !important;
+  color: var(--brand-primary) !important;
+  border-color: #fff !important;
+}
+
+/* Section headings */
+.section-heading h2 {
+  background-color: var(--brand-primary) !important;
+  border-color: var(--brand-primary) !important;
+  color: #fff !important;
+}
+
+/* Small accent elements (use orange) */
+.accent--orange, .accent.orange {
+  color: var(--brand-secondary) !important;
+}
+.badge-accent {
+  background: var(--brand-secondary) !important;
+  color: #fff !important;
+}
+
+/* Footer links and small UI elements */
+footer a, .small-link {
+  color: var(--brand-primary) !important;
+}
+
+/* Make sure form focus outlines use brand */
+input:focus, textarea:focus, select:focus {
+  outline-color: var(--brand-primary) !important;
+  box-shadow: 0 0 0 3px rgba(35,94,136,0.12) !important;
+}
+
+/* Virfication/hero overrides if needed */
+.hero, .hero-background, .virf-hero {
+  background: linear-gradient(135deg, var(--brand-primary), var(--brand-accent)) !important;
+}
+
+/* Header/Nav overrides */
+.header-area {
+  background-color: var(--brand-primary) !important;
+}
+.header-area .main-nav {
+  background-color: transparent !important;
+}
+.header-area .main-nav .nav li a {
+  color: #fff !important;
+}
+.header-area .main-nav .nav li a.active,
+.header-area .main-nav .nav li a:hover {
+  color: var(--brand-secondary) !important;
+}
+.header-area .main-nav .logo img {
+  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.25));
+}
+
+/* Homepage hero/banner overrides */
+.main-banner .owl-nav .owl-prev,
+.main-banner .owl-nav .owl-next {
+  background: var(--brand-secondary) !important;
+  color: #fff !important;
+}
+.main-banner .item .header-text h2,
+.main-banner .item .header-text h6 {
+  color: #fff !important;
+}
+.main-banner .item::before,
+.main-banner::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(35,94,136,0.7), rgba(13,59,90,0.6));
+  pointer-events: none;
+}

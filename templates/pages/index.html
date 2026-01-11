@@ -1,814 +1,637 @@
-<!-- {% extends 'base.html' %}
+{% extends 'base.html' %}
 {% load static %}
 {% block content %}
 
-<br>
-<br>
-<br>
+<div style="height: 70px;"></div>
 
 {% for message in messages %}
-<div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+<div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert" style="direction: rtl;">
   <li class="{{ message.tags }}">{{ message }}</li>
   <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="close"></button>
 </div>
 {% endfor %}
-  <section id="section-1">
-    <div class="content-slider">
-      {% if promo_requests %}
-      {% for promo_request in promo_requests %}
-        {% if promo_request.active %}
-          <input type="radio" id="banner{{ forloop.counter }}" class="sec-1-input" name="banner" {% if forloop.first %}checked{% endif %}>
-        {% endif %}
-      {% endfor %}
-      <div class="slider">
-        {% for promo_request in promo_requests %}
-          {% if promo_request.active %}
-            <div id="top-banner-{{ forloop.counter }}" class="banner">
-              <div class="banner-inner-wrapper header-text">
-                <div class="main-caption" style="position: relative; padding: 40px; color: #fff; text-align: center; border-radius: 15px; overflow: hidden;">
-                  {% if promo_request.project.image %}
-                    <img src="{{ promo_request.project.image.url }}" alt="{{ promo_request.project.title }}" class="promo-image">
-                  {% else %}
-                    <img src="{% static 'assets/images/myp.png' %}" alt="Default Image" class="promo-image">
-                  {% endif %}
-                  <div class="caption-overlay">
-                    <h1>{{ promo_request.project.title }}</h1>
-                    <p>{{ promo_request.project.discripe }}</p>
-                    <p class="investment-opportunity">فرصة استثمارية لا تُفوَّت! انضم إلى مشروعنا وكن جزءًا من نجاح مبهر. استثمر الآن وحقق أرباحًا مجزية.</p>
-                    <div class="border-button">
-                      <a href="{% url 'deals' %}">الاستثمار في المشروع</a>
-                    </div>
-                  </div>
-                </div>
-                <div class="container">
-                  <div class="row">
-                    <div class="col-lg-12">
-                      <div class="more-info">
-                        <div class="row">
-                          <div class="col-lg-3 col-sm-6 col-6" style="flex: 0 0 auto; width: 20%;">
-                            <i class="fa fa-map"></i>
-                            <h4><span>موقع المشروع:</span><br>{{ promo_request.project.address }}<em></em></h4>
-                          </div>
-                          <div class="col-lg-3 col-sm-6 col-6" style="flex: 0 0 auto; width: 20%;">
-                            <i class="fa fa-globe"></i>
-                            <h4><span>تصنيف المشروع:</span><br>{{ promo_request.project.category }}<em></em></h4>
-                          </div>
-                          <div class="col-lg-3 col-sm-6 col-6" style="flex: 0 0 auto; width: 20%;">
-                            <i class="fa fa-home"></i>
-                            <h4><span>التكلفة المقدرة:</span><br>{{ promo_request.project.cost }}</h4>
-                          </div>
-                          <div class="col-lg-3 col-sm-6 col-6" style="flex: 0 0 auto; width: 20%;">
-                            <i class="fa fa-user"></i>
-                            {% if promo_request.title_length > 13 %}
-                              <h4 style="font-size: 10px;"><span>اسم المشروع:</span><br>{{ promo_request.project.title }}</h4>
-                            {% else %}
-                              <h4><span>اسم المشروع:</span><br>{{ promo_request.project.title }}</h4>
-                            {% endif %}
-                          </div>
-                          <div class="col-lg-3 col-sm-6 col-6" style="flex: 0 0 auto; width: 20%;">
-                            <div class="main-button">
-                              <a href="{% url 'deals' %}">قراءة المزيد</a>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          {% endif %}
-        {% endfor %}
-      </div>
-      
-      <nav>
-        <div class="controls">
-          {% for promo_request in promo_requests %}
-            {% if promo_request.active %}
-              <label for="banner{{ forloop.counter }}"><span class="progressbar"><span class="progressbar-fill"></span></span><span class="text">{{ forloop.counter }}</span></label>
-            {% endif %}
-          {% endfor %}
+
+<!-- HERO -->
+<section class="abyati-hero" style="direction: rtl;">
+  <div class="abyati-hero-overlay"></div>
+
+  <div class="container position-relative" style="z-index: 2;">
+    <div class="row align-items-center">
+      <div class="col-lg-7">
+        <div class="hero-logo mb-3">
+          <img src="{% static 'assets/images/متاجر ابياتي.jfif' %}" alt="شعار متاجر أبياتي" style="height:80px; border-radius:8px; box-shadow:0 2px 8px rgba(0,0,0,0.15);" />
         </div>
-      </nav>
-    {% else %}
-      <div class="no-promo-requests" style="text-align: center; padding: 50px;">
-        <img src="{% static 'assets/images/myp.png' %}" alt="No Promo Requests" class="promo-image">
-        <!-- <h2 style="color: #333; margin-top: 20px;">لا توجد طلبات ترويج حالياً</h2> -->
+        <span class="badge-abyati">متاجر أبياتي</span>
+        <h1 class="hero-title">تجربة تسوّق أقرب… أسرع… وأفضل</h1>
+        <p class="hero-subtitle">
+          سلسلة متاجر تخدم أهالي تبوك بفروع متعددة، وتوفّر احتياجاتك اليومية بجودة عالية وأسعار منافسة،
+          مع اهتمام حقيقي بخدمة العملاء وتنوع المنتجات.
+        </p>
+
+        <div class="hero-actions">
+          <a href="{% url 'login' %}" class="btn-abyati primary">
+            تسجيل الدخول
+          </a>
+          <a href="#branches" class="btn-abyati outline">
+            استعراض الفروع
+          </a>
+          {% if request.user.is_authenticated %}
+            {% if request.user.owner %}
+              <a href="{% url 'investor_list' %}" class="btn-abyati primary">قائمة الموظفين للتقييم</a>
+            {% elif request.user.investor %}
+              <a href="{% url 'profile' %}" class="btn-abyati primary">عرض تقييمي</a>
+            {% endif %}
+          {% endif %}
+        </div>
+
+        <div class="hero-features">
+          <div class="hf-item">
+            <span class="hf-icon">🛒</span>
+            <div>
+              <div class="hf-title">تنوع المنتجات</div>
+              <div class="hf-text">مواد غذائية، منظفات، عناية شخصية، وأكثر</div>
+            </div>
+          </div>
+          <div class="hf-item">
+            <span class="hf-icon">🥖</span>
+            <div>
+              <div class="hf-title">مخبوزات طازجة</div>
+              <div class="hf-text">يوميًا بجودة عالية</div>
+            </div>
+          </div>
+          <div class="hf-item">
+            <span class="hf-icon">🚚</span>
+            <div>
+              <div class="hf-title">فرع الأونلاين</div>
+              <div class="hf-text">تجهيز الطلبات بسرعة وسهولة</div>
+            </div>
+          </div>
+        </div>
       </div>
-    {% endif %}
+
+      <div class="col-lg-5 mt-4 mt-lg-0">
+        <div class="hero-card">
+          <div class="hero-card-top">
+            <div class="hero-card-logo">
+              <img src="{% static 'assets/images/متاجر ابياتي.jfif' %}" alt="شعار متاجر أبياتي" />
+            </div>
+            <div class="hero-card-title">
+              <h3>عن الشركة</h3>
+              <p>نهدف لتقديم أفضل تجربة شراء عبر الفروع والأونلاين.</p>
+            </div>
+          </div>
+          <div class="hero-card-body">
+            <div class="hero-mini">
+              <div class="mini-title">رؤيتنا</div>
+              <div class="mini-text">أن نكون الخيار الأول للتسوق اليومي في تبوك.</div>
+            </div>
+            <div class="hero-mini">
+              <div class="mini-title">رسالتنا</div>
+              <div class="mini-text">توفير منتجات موثوقة وخدمة راقية بأسعار عادلة.</div>
+            </div>
+            <div class="hero-mini">
+              <div class="mini-title">قيمنا</div>
+              <div class="mini-text">الجودة • الأمانة • سرعة الخدمة • رضا العميل</div>
+            </div>
+          </div>
+
+          <div class="hero-card-footer">
+            <a href="#contact" class="btn-abyati small">تواصل معنا</a>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </section>
 
-<div><br><br><br><br></div>
-
-
-  
-  <div class="amazing-deals">
+<!-- ABOUT -->
+<section class="abyati-section" style="direction: rtl;">
   <div class="container">
-    <div class="row">
-      <div class="containerrr"  style="direction: rtl;">
-        <div class="text-box">
-            <h2>لماذا منصة وصل؟</h2>
-            <p>1. توفير فرص استثمارية مبتكرة وواعدة:</p>
-            <ul>
-                <li>- توفير فرص استثمارية متنوعة للمستثمرين.</li>
-                <li>- تعزيز تنويع محفظة الاستثمارات وزيادة الفرص لتحقيق عوائد مجزية.</li>
-            </ul>
-            <p>2. تسهيل عملية الاستثمار وتحسين نتائجها:</p>
-            <ul>
-                <li>- استخدام التكنولوجيا لتسهيل عمليات الاستثمار.</li>
-                <li>- تحسين تجربة المستثمر وفعالية استخدام المنصة.</li>
-            </ul>
-            <p>3. تعزيز التواصل بين المستثمرين وأصحاب المشاريع:</p>
-            <ul>
-                <li>- إنشاء بيئة تواصل فعالة بين المستثمرين ورواد الأعمال.</li>
-                <li>- تعزيز التفاعل والتعاون لتحقيق المشاريع.</li>
-            </ul>
-            <p>4. تحسين مستوى الشفافية والثقة:</p>
-            <ul>
-                <li>- رفع مستوى الشفافية في عمليات الاستثمار.</li>
-                <li>- بناء ثقة المستثمرين وتحفيز مشاركتهم.</li>
-            </ul>
-            <p>5. دعم رواد الأعمال والمشاريع الناشئة:</p>
-            <ul>
-                <li>- تقديم الدعم والموارد لرواد الأعمال والمشاريع الناشئة.</li>
-                <li>- تعزيز نجاحها وتطوير أعمالها على المدى الطويل.</li>
-            </ul>
-        </div>
-    
-        <div class="image-box">
-            <div class="main-container-image">
-            </div>
-        </div>
-    </div>
-    
-      
-    <div class="main-container">
-      <!-- القطعة الأولى -->
-      <div class="info-blockk">
-        <div class="info-text">لمعرفة كل ما هو متعلق برفع المشاريع والترويج ، انتقل الى الصفحة التالية</div>
-        <a href="{% url 'owner_method' %}" class="info-linkk">مساعدة مالك المشروع</a>
-      </div>
-    
- <!-- القطعة الثالثة -->
- <div class="info-blockk">
-  <div class="info-text">طلب خدمة دراسة جدوى للمشاريع. سواء كنت مستثمرًا أو مالك مشروع، احصل على دراسة جدوى متكاملة.</div>
-  <a href="{% url 'feasibility_study' %}" class="info-linkk">طلب دراسة جدوى</a>
-</div>
+    <div class="row g-4 align-items-stretch">
+      <div class="col-lg-6">
+        <div class="about-box">
+          <h2 class="section-title">لماذا متاجر أبياتي؟</h2>
+          <p class="section-desc">
+            لأننا نركز على التفاصيل: توافر المنتجات، جودة العرض، تنظيم الأقسام، سرعة المحاسبة،
+            واهتمام دائم بتجربة العميل داخل المتجر وخارجه.
+          </p>
 
-
-      <!-- القطعة الثانية -->
-      <div class="info-blockk">
-        <div class="info-text"> لمعرفة كل ما هو متعلق بالاستثمار في المشاريع انتقل الى الصفحة التالية</div>
-        <a href="{% url 'inv_method' %}" class="info-linkk"> مساعدة المستثمر</a>
-      </div>
-    
-    </div>
-    <div class="container">
-      <div class="row">
-        {% for project in projects %}
-        <div class="col-lg-6 project-item" id="project{{ project.id }}" data-category="{% if project.category %}{{ project.category.category }}{% else %}none{% endif %}">
-            <!-- تفاصيل المشروع -->
-            <div class="item">
-              <div class="row">
-                <div class="col-lg-6 col-md-12">
-                  {% if project.image %}
-                  <div class="image" style="background-image: url('{{ project.image.url }}'); border-radius: 10px;">
-                    <div class="project-status">{{ project.status }}</div>
-                  </div>
-                  {% else %}
-                  <div class="image" style="background-color: #881782; height: 100%;">
-                    <div class="project-status">{{ project.status }}</div>
-                  </div>
-                  {% endif %}
-                </div>
-                <div class="col-lg-6 col-md-12 align-self-center">
-                  <div class="content">
-                    <span class="info">اسم المشروع: {{ project.title }} &nbsp;&nbsp; التقييم: {{ project.average_rating }}</span>
-                    <h4>التكلفة المقدرة: {{ project.cost }}</h4>
-                    <div class="row">
-                      <div class="col-6">
-                        <i class="fa fa-clock"></i>
-                        <span class="list">تصنيف المشروع</span>
-                        <div class="value" style="text-align: center; font-size: large; color: #000000;">{{ project.category }}</div>
-                      </div>
-                      <div class="col-6">
-                        <i class="fa fa-map"></i>
-                        <span class="list">موقع المشروع</span>
-                        <div class="value" style="text-align: center; font-size: large; color: #000000;">{{ project.address }}</div>
-                      </div>
-                    </div>
-                    <p>
-                      <span class="list">وصف المشروع</span>
-                      {{ project.discripe|safe }}
-                    </p>
-                    <div class="main-button1" >
-                      {% if request.user.investor %}
-                      <a href="{% url 'invreq' project.id %}">الاستثمار في المشروع</a>
-                      {% endif %}
-                      <a href="{% url 'project_detail' project.id %}">تعليقات حول المشروع</a>
-                    </div>
-                  </div>
-                </div>
+          <div class="about-list">
+            <div class="about-item">
+              <span class="about-icon">✅</span>
+              <div>
+                <div class="about-title">جودة وتنوع</div>
+                <div class="about-text">منتجات متعددة تناسب جميع احتياجات الأسرة.</div>
               </div>
             </div>
-        </div>
-        {% endfor %}
-      </div>
-      <div class="my-5 text-center">
-        <a href="{% url 'deals' %}" class="bg-Primary hover:bg-Primary/90 border-2 border-Primary text-StaticWhite focus:outline-Primary-300 transition-colors ease-in-out duration-300 rounded-lg p-2 outline-offset-2 text-center w-2/3 max-w-xs md:py-3">
-            <div class="text-lg md:text-xl" style="background-color: #22b3c1; font-size: 14px; color: #22b3c1; background-color: #eee; border: 1px solid #22b3c1; padding: 12px 30px; display: inline-block; border-radius: 25px; font-weight: 500; text-transform: capitalize; letter-spacing: 0.5px; transition: all .3s; position: relative; overflow: hidden;">
-                عرض المزيد
+
+            <div class="about-item">
+              <span class="about-icon">✅</span>
+              <div>
+                <div class="about-title">أسعار منافسة</div>
+                <div class="about-text">عروض مستمرة وتخفيضات على مدار العام.</div>
+              </div>
             </div>
-        </a>
-    </div>
-    
-    </div>
-    
 
-
-
-
-
-
-        
-</div>
-</div></div>
-
-
-
-
-
-<div class="weekly-offers">
-  <div class="container">
-    <div class="row">
-      <div class="col-lg-6 offset-lg-3">
-        <div class="section-heading text-center">
-          <h2>اسعار باقات الاعلان عن مشروعك</h2>
-          <p style="font-size: larger;">قم بالاشتراك في الباقات للترويج لمشروعك لوصولة لاكبر عدد من المستثمرين </p>
-        </div>
-      </div>
-    </div>
-  </div>
-  <div class="container-fluid">
-    <div class="row">
-      <div class="col-lg-12">
-        <div class="owl-weekly-offers owl-carousel">
-          <div class="item">
-            <div class="thumb">
-              <img src="assets/images/offers-01.jpg" alt="">
-              <div class="text">
-                <h4>الباقة الشهرية</h4><br>
-                <h6>$10</h6>
-                <div class="line-dec"></div>
-                <ul>
-                  
-                </ul>
-                <div class="main-button">
-                  <a href="project.html">مشاريعي</a>
-                </div>
+            <div class="about-item">
+              <span class="about-icon">✅</span>
+              <div>
+                <div class="about-title">سهولة الوصول</div>
+                <div class="about-text">فروع متعددة + فرع أونلاين لخدمة أسرع.</div>
               </div>
             </div>
           </div>
-          <div class="item">
-            <div class="thumb">
-              <img src="assets/images/offers-03.jpg" alt="">
-              <div class="text">
-                <h4>الباقة الذهبية</h4><br>
-                <h6>$15</h6>
-                <div class="line-dec"></div>
-                <ul>
-                  
-                </ul>
-                <div class="main-button">
-                  <a href="project.html">مشاريعي</a>
-                </div>
-              </div>
-            </div>
+
+          <div class="about-actions">
+            <a href="#branches" class="btn-abyati primary">مشاهدة الفروع</a>
+            <a href="{% url 'about' %}" class="btn-abyati outline-dark">من نحن</a>
           </div>
-          <div class="item">
-            <div class="thumb">
-              <img src="assets/images/offers-02.jpg" alt="">
-              <div class="text">
-                <h4>الباقةالاسبوعية</h4><br>
-                <h6>$5</h6>
-                <div class="line-dec"></div>
-                <ul>
-                  
-                </ul>
-                <div class="main-button">
-                  <a href="project.html">مشاريعي</a>
-                </div>
-              </div>
-            </div>
+        </div>
+      </div>
+
+      <div class="col-lg-6">
+        <div class="about-image">
+          <div class="about-image-overlay"></div>
+          <div class="about-image-content">
+            <h3>متاجر أبياتي</h3>
+            <p>تسوق بثقة… وخدمة نعتز بها.</p>
           </div>
         </div>
       </div>
     </div>
   </div>
-</div>
+</section>
 
-
-
-
-
-<div class="call-to-action2">
+<!-- BRANCHES -->
+<section id="branches" class="abyati-section alt" style="direction: rtl;">
   <div class="container">
-    <div class="row justify-content-center">
-      <div class="col-lg-8">
-        <div class="text-center">
-          <h2>لدينا</h2>
-        </div>
-      </div>
+    <div class="text-center mb-4">
+      <h2 class="section-title">فروعنا في تبوك</h2>
+      <p class="section-desc">اختر الفرع الأقرب إليك — أو اطلب من فرع الأونلاين.</p>
     </div>
-    <div class="row justify-content-center">
-      <div class="col-md-6 col-lg-3">
-        <div class="count-area-content percentage text-center">
-          <div class="count-digit">{{ total_investmentrequest }}</div>
-          <div class="count-title">نجاح الاستثمار</div>
+
+    <div class="row g-4">
+      <!-- Branch 1 -->
+      <div class="col-md-6 col-lg-4">
+        <div class="branch-card">
+          <div class="branch-badge">فرع رئيسي</div>
+          <h3 class="branch-title">تبوك – متاجر أبياتي</h3>
+          <p class="branch-desc">الفرع الأساسي لخدمة العملاء وتوفير أكبر تنوع من المنتجات.</p>
+          <div class="branch-meta">
+            <span>🕒</span> <span>يوميًا</span>
+          </div>
         </div>
       </div>
-      <div class="col-md-6 col-lg-3">
-        <div class="count-area-content text-center">
-          <div class="count-digit">{{ total_owners }}</div>
-          <div class="count-title">رواد مشاريع</div>
+
+      <!-- Branch 2 -->
+      <div class="col-md-6 col-lg-4">
+        <div class="branch-card">
+          <div class="branch-badge">حي الراجحي</div>
+          <h3 class="branch-title">فرع حي الراجحي</h3>
+          <p class="branch-desc">تسوق سريع وقريب مع توفر الاحتياجات الأساسية يوميًا.</p>
+          <div class="branch-meta">
+            <span>📍</span> <span>تبوك – حي الراجحي</span>
+          </div>
         </div>
       </div>
-      <div class="col-md-6 col-lg-3">
-        <div class="count-area-content new-students text-center">
-          <div class="count-digit">{{ total_investor }}</div>
-          <div class="count-title">مستثمرين</div>
+
+      <!-- Branch 3 -->
+      <div class="col-md-6 col-lg-4">
+        <div class="branch-card">
+          <div class="branch-badge">سوق الخضار</div>
+          <h3 class="branch-title">فرع سوق الخضار</h3>
+          <p class="branch-desc">موقع مثالي للشراء اليومي وتلبية احتياجات المنزل بسرعة.</p>
+          <div class="branch-meta">
+            <span>📍</span> <span>تبوك – سوق الخضار</span>
+          </div>
         </div>
       </div>
-      <div class="col-md-6 col-lg-3">
-        <div class="count-area-content text-center">
-          <div class="count-digit">{{ total_projects }}</div>
-          <div class="count-title">مشاريع</div>
+
+      <!-- Branch 4 -->
+      <div class="col-md-6 col-lg-4">
+        <div class="branch-card">
+          <div class="branch-badge">الصالحية</div>
+          <h3 class="branch-title">فرع الصالحية</h3>
+          <p class="branch-desc">فرع متكامل بخيارات واسعة وخدمة عملاء مميزة.</p>
+          <div class="branch-meta">
+            <span>📍</span> <span>تبوك – الصالحية</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Branch 5 -->
+      <div class="col-md-6 col-lg-4">
+        <div class="branch-card highlight">
+          <div class="branch-badge">الأونلاين</div>
+          <h3 class="branch-title">فرع الأونلاين</h3>
+          <p class="branch-desc">اطلب بسهولة واستلم بسرعة — تجهيز الطلبات بإتقان.</p>
+          <div class="branch-meta">
+            <span>🚚</span> <span>تجهيز الطلبات</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Extra card -->
+      <div class="col-md-6 col-lg-4">
+        <div class="branch-card">
+          <div class="branch-badge">خدمة العملاء</div>
+          <h3 class="branch-title">دعم ومتابعة</h3>
+          <p class="branch-desc">نسعد باستقبال ملاحظاتك لتطوير الخدمة باستمرار.</p>
+          <div class="branch-meta">
+            <span>💬</span> <span>تواصل معنا</span>
+          </div>
         </div>
       </div>
     </div>
   </div>
-</div>
-<div class="call-to-action">
+</section>
+
+<!-- SERVICES -->
+<section class="abyati-section" style="direction: rtl;">
   <div class="container">
-    <div class="row">
-      <div class="col-lg-8">
-        <h1>قم بالاعلان عن مشروعك لايجاد المستثمرين  </h1>
+    <div class="text-center mb-4">
+      <h2 class="section-title">ماذا نقدّم؟</h2>
+      <p class="section-desc">خدمات تركّز على الراحة والجودة وسرعة إنجاز طلباتك.</p>
+    </div>
+
+    <div class="row g-4">
+      <div class="col-md-6 col-lg-3">
+        <div class="service-card">
+          <div class="service-icon">🧾</div>
+          <h4>تنظيم ومتابعة</h4>
+          <p>نظام داخلي يساعد على ضبط الأسعار وتوفر المنتجات.</p>
+        </div>
       </div>
-      <div class="col-lg-4">
-        <div class="border-button">
-          <a href="reservation.html"> </a>
+      <div class="col-md-6 col-lg-3">
+        <div class="service-card">
+          <div class="service-icon">🧼</div>
+          <h4>عناية ونظافة</h4>
+          <p>تشكيلة واسعة من المنظفات والعناية الشخصية.</p>
+        </div>
+      </div>
+      <div class="col-md-6 col-lg-3">
+        <div class="service-card">
+          <div class="service-icon">🥛</div>
+          <h4>مواد غذائية</h4>
+          <p>منتجات يومية، ألبان، معلبات، ومستلزمات البيت.</p>
+        </div>
+      </div>
+      <div class="col-md-6 col-lg-3">
+        <div class="service-card">
+          <div class="service-icon">⚡</div>
+          <h4>سرعة الخدمة</h4>
+          <p>تركيز على تجربة العميل وإنهاء التسوق بسرعة.</p>
         </div>
       </div>
     </div>
   </div>
-</div>
-<script>
+</section>
 
-document.getElementById('new-filter-form').addEventListener('submit', function (event) {
-  event.preventDefault(); 
-
-  const selectedCategory = document.getElementById('categories').value;
-
-  projectItems.forEach(item => {
-    const itemCategory = item.dataset.category;
-
-    if (itemCategory === selectedCategory || selectedCategory === 'all') {
-      item.style.display = 'block';
-    } else {
-      item.style.display = 'none';
-    }
-  });
-});
-
-
-</script>
-
-<script>
-  const categoryLinks = document.querySelectorAll('.category-link');
-  const projectItems = document.querySelectorAll('.project-item');
-
-  categoryLinks.forEach(link => {
-    link.addEventListener('click', (event) => {
-      event.preventDefault();
-      const selectedCategory = link.dataset.category;
-
-      projectItems.forEach(item => {
-        const itemCategory = item.dataset.category;
-
-        if (itemCategory === selectedCategory || selectedCategory === 'all') {
-          item.style.display = 'block';
-        } else {
-          item.style.display = 'none';
-        }
-      });
-
-      if (selectedCategory === 'all') {
-        projectItems.forEach(item => {
-          item.style.display = 'block';
-        });
-      } else {
-        projectItems.forEach(item => {
-          const itemCategory = item.dataset.category;
-          if (!itemCategory) {
-            item.style.display = 'block';
-          }
-        });
-      }
-    });
-  });
-  document.addEventListener('DOMContentLoaded', function() {
-  var projectItems = document.querySelectorAll('.project-item');
-  projectItems.forEach(function(projectItem) {
-    projectItem.addEventListener('click', function() {
-      var projectId = this.id.replace('project', ''); // 
-      window.location.href = '/project_detail/' + projectId + '/'; // 
-    });
-  });
-});
-
-
-</script>
-
-
+<!-- CTA -->
+<section class="abyati-cta" id="contact" style="direction: rtl;">
+  <div class="container">
+    <div class="cta-box">
+      <div>
+        <h2>متاجر أبياتي — نرحب بك دائمًا</h2>
+        <p>للدخول إلى النظام (موظف/مُقيّم) أو للاستفسارات.</p>
+      </div>
+      <div class="cta-actions">
+            <a href="{% url 'login' %}" class="btn-abyati primary">تسجيل الدخول</a>
+            <a href="{% url 'about' %}" class="btn-abyati outline-dark">معلومات أكثر</a>
+            {% if request.user.is_authenticated %}
+              {% if request.user.owner %}
+                <a href="{% url 'investor_list' %}" class="btn-abyati primary">اذهب للتقييم</a>
+              {% elif request.user.investor %}
+                <a href="{% url 'profile' %}" class="btn-abyati primary">عرض تقييمي</a>
+              {% endif %}
+            {% endif %}
+      </div>
+    </div>
+  </div>
+</section>
 
 <style>
-  .promo-image {
-    width: 100%;
-    height: auto;
-    border-radius: 15px;
+  /* ====== Theme ====== */
+  :root{
+    --abyati: #22b3c1;
+    --abyati-dark: #1a8a96;
+    --text: #111;
+    --muted: #555;
+    --bg: #f7f7f7;
   }
 
-  .banner .caption-overlay {
-    background-color: rgba(0, 0, 0, 0.6);
-    padding: 30px;
-    border-radius: 15px;
-    margin-top: -56%;
+  /* ====== Hero ====== */
+  .abyati-hero{
     position: relative;
-    z-index: 1;
+    padding: 80px 0;
+    background:
+      linear-gradient(180deg, rgba(0,0,0,.25), rgba(0,0,0,.65)),
+      url("{% static 'assets/images/myp.png' %}") center/cover no-repeat;
+    overflow: hidden;
+    border-bottom-left-radius: 28px;
+    border-bottom-right-radius: 28px;
+  }
+  .abyati-hero-overlay{
+    position: absolute; inset: 0;
+    background: radial-gradient(circle at 20% 20%, rgba(34,179,193,.35), transparent 45%);
+    mix-blend-mode: screen;
   }
 
-  .caption-overlay h1 {
-    margin: 0;
-    font-size: 36px;
-    font-weight: bold;
-    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
-  }
-
-  .caption-overlay p {
-    margin-top: 20px;
-    font-size: 18px;
-    line-height: 1.6;
-    color: #d1d1d1;
-    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
-  }
-
-  .caption-overlay .investment-opportunity {
-    margin-top: 20px;
-    font-size: 20px;
-    line-height: 1.8;
-    font-weight: bold;
-    color: #ffd700;
-    text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.7);
-  }
-
-  .caption-overlay .border-button a {
-    padding: 12px 25px;
-    background-color: #22b3c1;
+  .badge-abyati{
+    display:inline-block;
+    background: rgba(255,255,255,.12);
+    border: 1px solid rgba(255,255,255,.28);
     color: #fff;
-    text-decoration: none;
-    border-radius: 5px;
-    font-size: 16px;
-    transition: background-color 0.3s, transform 0.3s;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    padding: 7px 12px;
+    border-radius: 999px;
+    font-weight: 800;
+    letter-spacing: .3px;
+    margin-bottom: 12px;
   }
-  element.style {
-    text-align: center;
-    padding: 0px;
-    margin: 69px 50px 50px 50px;
-}
-  .caption-overlay .border-button a:hover {
-    background-color: #1a8a96;
+  .hero-title{
+    color:#fff;
+    font-size: 44px;
+    font-weight: 900;
+    line-height: 1.2;
+    margin-bottom: 14px;
+    text-shadow: 0 10px 30px rgba(0,0,0,.25);
+  }
+  .hero-subtitle{
+    color:#eaeaea;
+    font-size: 17px;
+    line-height: 1.95;
+    margin-bottom: 18px;
+  }
+
+  .hero-actions{
+    display:flex; gap: 12px; flex-wrap: wrap;
+    margin: 14px 0 18px;
+  }
+  .btn-abyati{
+    display:inline-block;
+    text-decoration:none;
+    border-radius: 14px;
+    padding: 12px 18px;
+    font-weight: 900;
+    transition: .2s ease;
+  }
+  .btn-abyati.primary{
+    background: var(--abyati);
+    border: 1px solid var(--abyati);
+    color: #fff;
+    box-shadow: 0 12px 25px rgba(34,179,193,.25);
+  }
+  .btn-abyati.primary:hover{
+    background: var(--abyati-dark);
+    border-color: var(--abyati-dark);
     transform: translateY(-2px);
+  }
+  .btn-abyati.outline{
+    background: transparent;
+    border: 1px solid rgba(255,255,255,.7);
+    color: #fff;
+  }
+  .btn-abyati.outline:hover{
+    background: rgba(255,255,255,.12);
+    transform: translateY(-2px);
+  }
+  .btn-abyati.outline-dark{
+    background: transparent;
+    border: 1px solid rgba(0,0,0,.2);
+    color: #111;
+  }
+  .btn-abyati.outline-dark:hover{
+    background: rgba(34,179,193,.08);
+    transform: translateY(-2px);
+  }
+  .btn-abyati.small{ padding: 10px 14px; border-radius: 12px; }
+
+  .hero-features{
+    display:grid;
+    grid-template-columns: repeat(3, minmax(0,1fr));
+    gap: 12px;
+    margin-top: 8px;
+  }
+  .hf-item{
+    background: rgba(255,255,255,.10);
+    border: 1px solid rgba(255,255,255,.14);
+    padding: 12px 12px;
+    border-radius: 16px;
+    display:flex; gap: 10px; align-items:flex-start;
+    color:#fff;
+  }
+  .hf-icon{ font-size: 20px; }
+  .hf-title{ font-weight: 900; margin-bottom: 2px; }
+  .hf-text{ opacity: .9; font-size: 13px; line-height: 1.6; }
+
+  .hero-card{
+    background: rgba(255,255,255,.96);
+    border: 1px solid rgba(255,255,255,.6);
+    border-radius: 20px;
+    overflow:hidden;
+    box-shadow: 0 20px 50px rgba(0,0,0,.18);
+  }
+  .hero-card-top{
+    display:flex; gap: 14px;
+    padding: 16px;
+    border-bottom: 1px solid rgba(0,0,0,.06);
+    align-items:center;
+  }
+  .hero-card-logo{
+    width: 64px; height: 64px;
+    border-radius: 16px;
+    overflow:hidden;
+    border: 1px solid rgba(0,0,0,.08);
+    background: #fff;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .hero-card-logo img{ width:100%; height:100%; object-fit:cover; }
+  .hero-card-title h3{ margin:0; font-weight: 900; }
+  .hero-card-title p{ margin:4px 0 0; color: var(--muted); font-size: 13px; }
+
+  .hero-card-body{ padding: 14px 16px; }
+  .hero-mini{
+    background: #fff;
+    border: 1px solid rgba(0,0,0,.06);
+    border-radius: 16px;
+    padding: 12px;
+    margin-bottom: 10px;
+  }
+  .mini-title{ font-weight: 900; margin-bottom: 6px; color: #111; }
+  .mini-text{ color: var(--muted); line-height: 1.8; font-size: 13px; }
+
+  .hero-card-footer{
+    padding: 14px 16px 18px;
+    border-top: 1px solid rgba(0,0,0,.06);
+    display:flex; justify-content:flex-end;
+  }
+
+  /* ====== Sections ====== */
+  .abyati-section{ padding: 60px 0; }
+  .abyati-section.alt{ background: var(--bg); }
+  .section-title{
+    font-weight: 1000;
+    margin-bottom: 10px;
+    color: var(--text);
+  }
+  .section-desc{
+    color: var(--muted);
+    line-height: 1.9;
+    margin-bottom: 0;
+  }
+
+  /* ====== About ====== */
+  .about-box{
+    background:#fff;
+    border: 1px solid rgba(0,0,0,.06);
+    border-radius: 22px;
+    padding: 22px;
+    box-shadow: 0 14px 35px rgba(0,0,0,.06);
+    height: 100%;
+  }
+  .about-list{ margin-top: 18px; }
+  .about-item{
+    display:flex; gap: 10px;
+    padding: 12px;
+    border-radius: 16px;
+    border: 1px solid rgba(0,0,0,.05);
+    margin-bottom: 10px;
+    background: rgba(34,179,193,.05);
+  }
+  .about-icon{ font-size: 18px; }
+  .about-title{ font-weight: 900; margin-bottom: 2px; }
+  .about-text{ color: var(--muted); font-size: 13px; line-height: 1.7; }
+  .about-actions{ display:flex; gap: 10px; flex-wrap: wrap; margin-top: 14px; }
+
+  .about-image{
+    position: relative;
+    border-radius: 22px;
+    overflow:hidden;
+    height: 100%;
+    min-height: 380px;
+    background:
+      linear-gradient(180deg, rgba(0,0,0,.20), rgba(0,0,0,.55)),
+      url("{% static 'assets/images/default-image.jpeg' %}") center/cover no-repeat;
+    box-shadow: 0 14px 35px rgba(0,0,0,.10);
+  }
+  .about-image-overlay{
+    position:absolute; inset:0;
+    background: radial-gradient(circle at 70% 20%, rgba(34,179,193,.35), transparent 45%);
+  }
+  .about-image-content{
+    position:absolute;
+    bottom: 18px;
+    right: 18px;
+    left: 18px;
+    color:#fff;
+    z-index: 2;
+    background: rgba(255,255,255,.08);
+    border: 1px solid rgba(255,255,255,.16);
+    border-radius: 18px;
+    padding: 14px 14px;
+    backdrop-filter: blur(6px);
+  }
+  .about-image-content h3{ margin:0 0 6px; font-weight: 1000; }
+  .about-image-content p{ margin:0; opacity:.92; line-height: 1.8; }
+
+  /* ====== Branches ====== */
+  .branch-card{
+    position: relative;
+    background:#fff;
+    border: 1px solid rgba(0,0,0,.06);
+    border-radius: 22px;
+    padding: 18px;
+    box-shadow: 0 14px 35px rgba(0,0,0,.06);
+    height: 100%;
+    transition: .2s ease;
+    overflow:hidden;
+  }
+  .branch-card:hover{
+    transform: translateY(-4px);
+    box-shadow: 0 18px 45px rgba(0,0,0,.10);
+  }
+  .branch-card:before{
+    content:"";
+    position:absolute;
+    top:-60px; left:-60px;
+    width: 150px; height: 150px;
+    background: rgba(34,179,193,.12);
+    border-radius: 50%;
+  }
+  .branch-card.highlight{
+    border-color: rgba(34,179,193,.35);
+    background: linear-gradient(180deg, #fff, rgba(34,179,193,.05));
+  }
+  .branch-badge{
+    display:inline-block;
+    background: rgba(34,179,193,.12);
+    color: var(--abyati-dark);
+    padding: 6px 10px;
+    border-radius: 999px;
+    font-weight: 900;
+    font-size: 12px;
+    margin-bottom: 10px;
+    border: 1px solid rgba(34,179,193,.20);
+  }
+  .branch-title{
+    font-weight: 1000;
+    margin: 0 0 8px;
+    color: #111;
+  }
+  .branch-desc{
+    color: var(--muted);
+    line-height: 1.9;
+    margin-bottom: 12px;
+  }
+  .branch-meta{
+    display:flex; gap: 8px;
+    color: #111;
+    font-weight: 800;
+    align-items:center;
+    opacity: .9;
+  }
+
+  /* ====== Services ====== */
+  .service-card{
+    background:#fff;
+    border: 1px solid rgba(0,0,0,.06);
+    border-radius: 22px;
+    padding: 18px;
+    box-shadow: 0 14px 35px rgba(0,0,0,.06);
+    height: 100%;
+    transition: .2s ease;
+  }
+  .service-card:hover{ transform: translateY(-3px); }
+  .service-icon{ font-size: 26px; margin-bottom: 10px; }
+  .service-card h4{ margin: 0 0 8px; font-weight: 1000; }
+  .service-card p{ margin:0; color: var(--muted); line-height: 1.9; }
+
+  /* ====== CTA ====== */
+  .abyati-cta{
+    padding: 30px 0 70px;
+    background: var(--bg);
+  }
+  .cta-box{
+    background: #fff;
+    border: 1px solid rgba(0,0,0,.06);
+    border-radius: 24px;
+    padding: 22px;
+    box-shadow: 0 14px 35px rgba(0,0,0,.06);
+    display:flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+  .cta-box h2{ margin:0 0 6px; font-weight: 1000; }
+  .cta-box p{ margin:0; color: var(--muted); line-height: 1.8; }
+  .cta-actions{ display:flex; gap: 10px; flex-wrap: wrap; }
+
+  @media (max-width: 992px){
+    .hero-title{ font-size: 34px; }
+    .hero-features{ grid-template-columns: 1fr; }
+    .about-image{ min-height: 300px; }
   }
 </style>
 
-<style>
-  .item {
-    margin-bottom: 30px;
-  }
-  
-  .project-image {
-    width: 100%;
-    height: 100%;
-    min-height: 300px; 
-    background-size: cover;
-    background-position: center;
-    border-radius: 15px;
-  }
-  
-  .content {
-    padding: 20px;
-  }
-  
-  @media (max-width: 768px) {
-    .project-image {
-      min-height: 200px;
-    }
-  
-    .content {
-      padding: 10px;
-    }
-  }
-
-  .containerrr .text-box p {
-    font-size: large;
-    color: #000000;
-  }
-  
-  .btn:focus {
-    color: var(--bs-btn-hover-color);
-    background-color: #22b3c1;
-    border-color: #22b3c1;
-    outline: 0;
-    box-shadow: var(--bs-btn-focus-box-shadow);
-}
-.search-form {
-      background-color: #22b3c1;
-      border-bottom-left-radius: 23px;
-      border-bottom-right-radius: 23px;
-      padding: 35px 60px;
-      margin-bottom: 20px;
-    }
-
-    .search-form h4 {
-      color: #fff;
-      font-size: 20px;
-      font-weight: 700;
-      margin-top: 10px;
-      
-    }
-
-    .search-form select {
-      background-color: transparent;
-      border: none;
-      outline: none;
-      box-shadow: none;
-      border-bottom: 1px solid #fff;
-      border-radius: 0px;
-      color: #fff;
-      font-size: 15px;
-      font-weight: 300;
-      width: 100%;
-      cursor: pointer;
-    }
-
-    .search-form option {
-      background-color: #1ea0ad;
-    }
-
-    .search-form button {
-      width: 100%;
-      text-align: center;
-      font-size: 14px;
-      color: #fff;
-      background-color: transparent;
-      border: 1px solid #fff;
-      padding: 8px 30px;
-      display: inline-block;
-      border-radius: 25px;
-      font-weight: 500;
-      text-transform: capitalize;
-      letter-spacing: 0.5px;
-      transition: all .3s;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .search-form button:hover {
-      background-color: #fff;
-      color: #22b3c1;
-    }
-  
- 
-  
-  .images {
-    width: 100%;
-    height: 100%;
-    overflow: hidden;
-  }
-
-
-
-
-
-  
-.our-facts h2 {
-    font-size: 38px;
-    color: #fff;
-    line-height: 50px;
-    font-weight: 700;
-    letter-spacing: 0.5px;
-    margin-bottom: 50px;
-    text-align: center;
-  }
-  
-  .count-area-content {
-    text-align: center;
-    background-color: rgba(250,250,250,0.15);
-    border-radius: 20px;
-    padding: 25px 30px 35px 30px;
-    margin: 15px 0px;
-  }
-  
-  .percentage .count-digit:after {
-    content: '';
-    margin-left: 3px;
-  }
-  
-  .count-digit {
-      margin: 5px 0px;
-      color: #f5a425;
-      font-weight: 700;
-      font-size: 36px;
-  }
-  .count-title {
-      font-size: 18px;
-      font-weight: 500;
-      color: #fff;
-      letter-spacing: 0.5px;
-  }
-  
-  .new-students {
-    margin-top: 14px;
-  }
-  
-  
-  .our-facts h2 {
-    font-size: 38px;
-    color: #fff;
-    line-height: 50px;
-    font-weight: 700;
-    letter-spacing: 0.5px;
-    margin-bottom: 50px;
-    text-align: center;
-  }
-  
-  .count-area-content {
-    text-align: center;
-    background-color: rgba(250,250,250,0.15);
-    border-radius: 20px;
-    padding: 25px 30px 35px 30px;
-    margin: 15px 0px;
-  }
-  
-  .percentage .count-digit:after {
-    content: '';
-    margin-left: 3px;
-  }
-  
-  .count-digit {
-      margin: 5px 0px;
-      color: #f5a425;
-      font-weight: 700;
-      font-size: 36px;
-  }
-  .count-title {
-      font-size: 18px;
-      font-weight: 500;
-      color: #fff;
-      letter-spacing: 0.5px;
-  }
-  
-  .new-students {
-    margin-top: 14px;
-  }
-
-
-
-
-
-
-
-.main-container {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-around;
-  align-items: center;
-  padding: 14px;
-  background-color: #ffffff;
-  margin-bottom: 20px;
-}
-
-.info-blockk {
-  text-align: center;
-  padding: 20px;
-  border: 2px solid #f7f7f7;
-  border-radius: 10px;
-  width: 300px;
-  height: 250px;
-  background-color: #f7f7f7;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  margin: 10px; 
-}
-
-.info-text {
-  font-size: 22px;
-  margin-bottom: 10px;
-  color: #000000;
-}
-
-.info-linkk {
-  text-decoration: none;
-  background-color: #22b3c1;
-  color: #fff;
-  padding: 10px;
-  border-radius: 5px;
-  transition: background-color 0.3s ease;
-}
-
-.info-linkk:hover {
-  background-color: #afafaf;
-}
-
-
-@media (max-width: 768px) {
-  .info-blockk {
-    width: 100%;
-    margin: 10px 0; 
-  }
-}
-
-.main-button1 a {
-    font-size: 14px;
-    color: #fff;
-    background-color: #22b3c1;
-    border: 1px solid #22b3c1;
-    padding: 15px 8px;
-    display: inline;
-    border-radius: 25px;
-    font-weight: 500;
-    text-transform: capitalize;
-    letter-spacing: 0.5px;
-    transition: all .3s;
-    position: relative;
-    overflow: hidden;
-}
-
-
-.weekly-offers .item .thumb .text {
-    direction: rtl;
-    position: absolute;
-    background-color: #fff;
-    border-radius: 23px;
-    right: 0;
-    top: 50%;
-    transform: translateY(-50%);
-    box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.15);
-    padding: 47px;
-    margin-right: 95px;
-}
-
-
-.project-status {
-  position: absolute;
-  background-color: #22b3c1;
-  padding: 7px;
-  border-top-left-radius: 10px ;
-  border-bottom-right-radius: 10px;
-}
-
-
-
-/*صفحة حسابي مالك مشروع ومستثمر خارب الناف 
-صلح فوتر صفحة التهنئة 
-مسافة من فوق في صفحة مراسلة الجدوى  للمالك
-شرط مايدخلك من القطعة ترفع مشروع الا اذا انته صاحب مشروع
-واستثمر عادي ياخذك الا الديلز
-شرط اذا ضفط رابط استثمر من الرئيسية اذا كان مستثمر فقط
-
-
-*/
-  </style>   
-  
 {% endblock %}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
- -->

@@ -24,9 +24,9 @@ urlpatterns = [
     path('',include('page.urls')),
     path('accounts/',include('accounts.urls')),
     path('FM/',include('FM.urls')),
-    # path('',include('The_Investor.urls')),
-    # path('owner',include('The_Owner.urls')),
-    # path('Chat',include('Chat.urls')),
+    path('investor/', include('The_Investor.urls')),
+    path('owner/', include('The_Owner.urls')),
+    path('Chat', include('Chat.urls')),
 ]
 # urlpatterns += static(Settings.MEDIA_URL , document_root = Settings.MEDIA_ROOT)
 

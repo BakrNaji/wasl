@@ -42,11 +42,18 @@ https://templatemo.com/tm-580-woox-travel
       <div class="row" style="direction: rtl;">
         <div class="col-lg-12">
           <center>
-          <div class="col-lg-12" style="background-color: #22b3c1; border-top-left-radius:30px; border-top-right-radius:30px;">
-            <h4>تعديل بياناتك الشخصية</h4>
+          <div class="col-lg-12" style="background-color: #22b3c1; border-top-left-radius:30px; border-top-right-radius:30px; position:relative; padding:18px;">
+            {% if photo_url %}
+              <img src="{{ photo_url }}" alt="الصورة الشخصية" style="width:96px;height:96px;border-radius:50%;object-fit:cover;border:3px solid #fff;position:absolute; right:16px; top:8px;"/>
+            {% endif %}
+            <h4 style="margin:0;">تعديل بياناتك الشخصية</h4>
+            {% if request.user.is_authenticated %}
+              <button id="edit-profile-toggle" type="button" class="btn btn-light" style="position:absolute; left:16px; top:8px;">تعديل</button>
+            {% endif %}
           </div>
         </center>
           {% if request.user.is_authenticated %}
+          <div id="edit-profile-section" style="display:none;">
           <form id="reservation-form" method="POST">
           {% csrf_token %}
             {% include 'parts/_alerts.html' %}
@@ -85,6 +92,24 @@ https://templatemo.com/tm-580-woox-travel
                             <input type="email" name="email" placeholder="name@example.com" required value="{{email}}" readonly>
                         </fieldset>
                         </div>
+                      <div class="col-lg-6">
+                        <fieldset>
+                          <label for="branch" class="form-label">الفرع</label>
+                          <input type="text" name="branch" value="{{ branch }}">
+                        </fieldset>
+                      </div>
+                      <div class="col-lg-6">
+                        <fieldset>
+                          <label for="department" class="form-label">القسم</label>
+                          <input type="text" name="department" value="{{ department }}">
+                        </fieldset>
+                      </div>
+                      <div class="col-lg-6">
+                        <fieldset>
+                          <label for="job_title" class="form-label">الوظيفة</label>
+                          <input type="text" name="job_title" value="{{ job_title }}">
+                        </fieldset>
+                      </div>
               <!-- <div class="col-lg-6">
                 <fieldset>
                     <label for="Number" class="form-label">رقم الهاتف</label>
@@ -99,6 +124,79 @@ https://templatemo.com/tm-580-woox-travel
               </div>
             </div>
           </form>
+          </div>
+          {% if evaluations %}
+          <div class="col-lg-12" style="margin-top:20px;">
+            <h4>تقييماتي</h4>
+            {% if average_evaluation %}
+              <p>متوسط التقييم العام: <strong>{{ average_evaluation }}</strong> / 5</p>
+            {% endif %}
+            <div class="evaluations-list">
+              {% for ev in evaluations %}
+                <div class="card" style="padding:10px; margin-bottom:10px;">
+                  <p><strong>المقيّم:</strong> {% if ev.evaluator %}{{ ev.evaluator.user.username }}{% else %}N/A{% endif %}</p>
+                  <p><strong>القسم:</strong> {{ ev.department }} &nbsp; <strong>الفرع:</strong> {{ ev.branch }}</p>
+                  <p><strong>الدرجة العامة:</strong> {{ ev.overall_score }} / 5</p>
+                  <p><strong>الملاحظات:</strong> {{ ev.comment }}</p>
+                  <p style="font-size:12px;color:#666;">{{ ev.created_at }}</p>
+                </div>
+              {% empty %}
+                <p>لا توجد تقييمات حتى الآن.</p>
+              {% endfor %}
+            </div>
+          </div>
+          {% endif %}
+         
+           <!-- Owner Evaluations Section -->
+           {% if is_owner and owner_evaluations %}
+           <div class="col-lg-12" style="margin-top:30px;">
+             <div class="card" style="border-radius:12px; padding:25px; box-shadow:0 4px 12px rgba(0,0,0,0.1); border-top:4px solid #235E88;">
+               <h4 style="color:#235E88; font-weight:700; margin-bottom:20px; display:flex; align-items:center; gap:10px;">📊 التقييمات التي أضفتها</h4>
+             
+               <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(300px, 1fr)); gap:15px;">
+                 {% for ev in owner_evaluations %}
+                 <div class="card" style="border-radius:10px; border-left:4px solid #F2A23F; padding:15px; background:#f8f9fa; transition:all 0.2s;" onmouseover="this.style.transform='translateY(-3px)'; this.style.boxShadow='0 6px 16px rgba(0,0,0,0.1)';" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 2px 8px rgba(0,0,0,0.05)';">
+                   <div style="display:flex; justify-content:space-between; align-items:start; margin-bottom:12px;">
+                     <div>
+                       <h5 style="color:#235E88; margin:0; font-weight:700;">👤 {{ ev.investor.user.username }}</h5>
+                       <small style="color:#666;">{{ ev.created_at|date:'d/m/Y H:i' }}</small>
+                     </div>
+                     <div style="background:#F2A23F; color:#fff; padding:8px 12px; border-radius:6px; font-weight:700; font-size:18px;">⭐ {{ ev.compute_overall|default:'0' }}/5</div>
+                   </div>
+                 
+                   <p style="margin:8px 0; color:#666; font-size:14px;"><strong>📍 الفرع:</strong> {{ ev.branch|default:'---' }}</p>
+                   <p style="margin:8px 0; color:#666; font-size:14px;"><strong>🏢 القسم:</strong> {{ ev.department|default:'---' }}</p>
+                 
+                   {% if ev.comment %}
+                   <div style="background:#fff; padding:10px; border-radius:6px; margin-top:10px; border-right:3px solid #235E88;">
+                     <small style="color:#999; display:block; margin-bottom:5px;">💬 الملاحظات:</small>
+                     <p style="margin:0; color:#555; font-size:14px;">{{ ev.comment }}</p>
+                   </div>
+                   {% endif %}
+                 
+                   {% if ev.image_set.all %}
+                   <div style="display:flex; gap:8px; margin-top:10px; flex-wrap:wrap;">
+                     {% for img in ev.image_set.all %}
+                     <a href="{{ img.image.url }}" target="_blank" style="display:inline-block; width:50px; height:50px; border-radius:6px; overflow:hidden; border:2px solid #ddd;">
+                       <img src="{{ img.image.url }}" style="width:100%; height:100%; object-fit:cover;" />
+                     </a>
+                     {% endfor %}
+                   </div>
+                   {% endif %}
+                 
+                   <div style="margin-top:12px; padding-top:12px; border-top:1px solid #ddd;">
+                     <span style="background:{% if ev.status == 'approved' %}#28a745{% elif ev.status == 'pending' %}#ffc107{% else %}#dc3545{% endif %}; color:#fff; padding:4px 10px; border-radius:4px; font-size:12px; font-weight:600;">
+                       {% if ev.status == 'approved' %}✓ معتمد{% elif ev.status == 'pending' %}⏳ قيد المراجعة{% else %}✗ مرفوض{% endif %}
+                     </span>
+                   </div>
+                 </div>
+                 {% empty %}
+                 <p style="color:#999; text-align:center; grid-column:1/-1;">لم تضف أي تقييمات بعد.</p>
+                 {% endfor %}
+               </div>
+             </div>
+           </div>
+           {% endif %}
           {% else %}
           <h4 class="alert alert-danger">
               يجب عليك 
@@ -132,6 +230,23 @@ https://templatemo.com/tm-580-woox-travel
       $(".option").removeClass("active");
       $(this).addClass("active"); 
     });
+  </script>
+
+  <script>
+    (function($){
+      $(document).ready(function(){
+        var $toggle = $('#edit-profile-toggle');
+        var $section = $('#edit-profile-section');
+        if($toggle.length && $section.length){
+          $toggle.on('click', function(){
+            $section.slideToggle(200);
+            // change button text
+            var txt = $toggle.text().trim();
+            $toggle.text(txt === 'تعديل' ? 'إلغاء' : 'تعديل');
+          });
+        }
+      });
+    })(jQuery);
   </script>
 
   </body>

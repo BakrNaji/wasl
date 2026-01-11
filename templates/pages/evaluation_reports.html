@@ -1,0 +1,169 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}تقارير التقييم{% endblock %}
+
+{% block content %}
+<div class="container-fluid px-4">
+    <div class="row my-4">
+        <div class="col-12">
+            <h2 class="mb-4"><i class="fas fa-chart-line me-2"></i>تقارير التقييم</h2>
+            
+            <!-- إحصائيات الفروع -->
+            <div class="card shadow mb-4">
+                <div class="card-header bg-info text-white">
+                    <h5 class="mb-0"><i class="fas fa-building me-2"></i>إحصائيات الفروع</h5>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>الفرع</th>
+                                    <th>عدد الأقسام</th>
+                                    <th>متوسط التقييم</th>
+                                    <th>الحالة</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for stat in branch_stats %}
+                                <tr>
+                                    <td>{{ stat.branch.name }}</td>
+                                    <td><span class="badge bg-secondary">{{ stat.dept_count }}</span></td>
+                                    <td>{{ stat.avg_percentage }}%</td>
+                                    <td>
+                                        {% if stat.avg_percentage >= 80 %}
+                                        <span class="badge bg-success">ممتاز</span>
+                                        {% elif stat.avg_percentage >= 60 %}
+                                        <span class="badge bg-warning">جيد</span>
+                                        {% else %}
+                                        <span class="badge bg-danger">يحتاج تحسين</span>
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                                {% empty %}
+                                <tr>
+                                    <td colspan="4" class="text-center text-muted">لا توجد بيانات</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- تقييمات الأقسام -->
+            <div class="card shadow mb-4">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0"><i class="fas fa-sitemap me-2"></i>تقييمات الأقسام</h5>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>القسم</th>
+                                    <th>الفرع</th>
+                                    <th>الشهر</th>
+                                    <th>الملاحظات</th>
+                                    <th>النقاط</th>
+                                    <th>النسبة</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for eval in dept_evaluations %}
+                                <tr>
+                                    <td>{{ eval.department.name }}</td>
+                                    <td>{{ eval.department.branch.name }}</td>
+                                    <td>{{ eval.month|date:"Y-m" }}</td>
+                                    <td><span class="badge bg-info">{{ eval.total_observations }}</span></td>
+                                    <td><span class="badge bg-success">{{ eval.total_score }}</span></td>
+                                    <td>
+                                        {% if eval.percentage >= 80 %}
+                                        <span class="text-success fw-bold">{{ eval.percentage }}%</span>
+                                        {% elif eval.percentage >= 60 %}
+                                        <span class="text-warning fw-bold">{{ eval.percentage }}%</span>
+                                        {% else %}
+                                        <span class="text-danger fw-bold">{{ eval.percentage }}%</span>
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                                {% empty %}
+                                <tr>
+                                    <td colspan="6" class="text-center text-muted">لا توجد تقييمات للأقسام</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- تقييمات الموظفين -->
+            <div class="card shadow mb-4">
+                <div class="card-header bg-warning text-white">
+                    <h5 class="mb-0"><i class="fas fa-users me-2"></i>تقييمات الموظفين</h5>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>الموظف</th>
+                                    <th>القسم</th>
+                                    <th>الشهر</th>
+                                    <th>الملاحظات</th>
+                                    <th>النقاط</th>
+                                    <th>النسبة</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for eval in emp_evaluations %}
+                                <tr>
+                                    <td>{{ eval.employee.user.username }}</td>
+                                    <td>
+                                        {% if eval.employee.department %}
+                                        {{ eval.employee.department.name }}
+                                        {% else %}
+                                        <span class="text-muted">-</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>{{ eval.month|date:"Y-m" }}</td>
+                                    <td><span class="badge bg-info">{{ eval.total_observations }}</span></td>
+                                    <td><span class="badge bg-success">{{ eval.total_score }}</span></td>
+                                    <td>
+                                        {% if eval.percentage >= 80 %}
+                                        <span class="text-success fw-bold">{{ eval.percentage }}%</span>
+                                        {% elif eval.percentage >= 60 %}
+                                        <span class="text-warning fw-bold">{{ eval.percentage }}%</span>
+                                        {% else %}
+                                        <span class="text-danger fw-bold">{{ eval.percentage }}%</span>
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                                {% empty %}
+                                <tr>
+                                    <td colspan="6" class="text-center text-muted">لا توجد تقييمات للموظفين</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="d-flex gap-2">
+                <a href="{% url 'evaluate_department' %}" class="btn btn-primary">
+                    <i class="fas fa-clipboard-check me-2"></i>تقييم قسم جديد
+                </a>
+                <a href="{% url 'evaluate_employee' %}" class="btn btn-warning text-white">
+                    <i class="fas fa-user-check me-2"></i>تقييم موظف جديد
+                </a>
+                <a href="{% url 'investor_list' %}" class="btn btn-outline-secondary">
+                    <i class="fas fa-arrow-right me-2"></i>رجوع
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

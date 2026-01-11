@@ -224,7 +224,28 @@ def profile(request):
                 if user_owner:
                     user_owner.address = request.POST['address']
                 elif user_investor:
-                    user_investor.address = request.POST['address']  # قم بتعديل some_field بحقول نموذج Investor الفعلية
+                    user_investor.address = request.POST['address']
+                    # allow investor to set branch/department/job_title
+                    # branch/department are ForeignKeys now
+                    from The_Investor.models import Branch, Department
+                    branch_val = request.POST.get('branch')
+                    dept_val = request.POST.get('department')
+                    try:
+                        user_investor.branch = Branch.objects.get(pk=branch_val) if branch_val else user_investor.branch
+                    except Exception:
+                        # fallback: try by name
+                        try:
+                            user_investor.branch = Branch.objects.get(name=branch_val)
+                        except Exception:
+                            pass
+                    try:
+                        user_investor.department = Department.objects.get(pk=dept_val) if dept_val else user_investor.department
+                    except Exception:
+                        try:
+                            user_investor.department = Department.objects.get(name=dept_val)
+                        except Exception:
+                            pass
+                    user_investor.job_title = request.POST.get('job_title', user_investor.job_title)
 
                 request.user.email = request.POST['email']
                 request.user.username = request.POST['user']
@@ -251,12 +272,26 @@ def profile(request):
                 user_owner = Owner.objects.filter(user=request.user).first()
                 user_investor = Investor.objects.filter(user=request.user).first()
 
+                # Get evaluations created by this owner (if owner)
+                owner_evaluations = []
+                if user_owner:
+                    from The_Investor.models import Evaluation
+                    owner_evaluations = Evaluation.objects.filter(evaluator=user_owner).select_related('investor__user').prefetch_related('scores')
+
                 context = {
                     'fname': request.user.first_name,
                     'lname': request.user.last_name,
                     'address': user_owner.address if user_owner else (user_investor.address if user_investor else ''),
                     'email': request.user.email,
                     'user': request.user.username,
+                    'evaluations': user_investor.evaluations_received.all() if user_investor else [],
+                    'average_evaluation': (sum([float(e.overall_score) for e in user_investor.evaluations_received.all()]) / user_investor.evaluations_received.count()) if user_investor and user_investor.evaluations_received.exists() else None,
+                    'branch': user_investor.branch if user_investor else '',
+                    'department': user_investor.department if user_investor else '',
+                    'job_title': user_investor.job_title if user_investor else '',
+                    'photo_url': (user_owner.photo.url if user_owner and getattr(user_owner, 'photo', None) else (user_investor.photo.url if user_investor and getattr(user_investor, 'photo', None) else '')),
+                    'owner_evaluations': owner_evaluations,
+                    'is_owner': bool(user_owner),
                 }
 
             return render(request, 'accounts/profile.html', context)
