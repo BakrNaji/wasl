@@ -10,124 +10,145 @@
             <div class="card shadow-lg border-0">
                 <div class="card-header bg-gradient-primary text-white py-3">
                     <h3 class="mb-0"><i class="fas fa-clipboard-check me-2"></i>تقييم قسم</h3>
-                    <div class="mt-2">
-                        <small>المعيار <span id="currentCriterionNum">1</span> من {{ criteria.count }}</small>
-                        <div class="progress mt-1" style="height: 5px;">
-                            <div id="progressBar" class="progress-bar" role="progressbar" style="width: 0%"></div>
-                        </div>
-                    </div>
                 </div>
                 <div class="card-body p-4">
                     <form method="POST" enctype="multipart/form-data" id="evaluationForm">
                         {% csrf_token %}
                         
-                        <!-- معلومات أساسية -->
-                        <div id="basicInfo">
-                            <div class="row mb-4">
-                                <div class="col-md-4">
-                                    <label class="form-label fw-bold">اختر الفرع</label>
-                                    <select id="branchSelect" class="form-select" required>
-                                        <option value="">-- اختر فرع --</option>
-                                        {% for branch in branches %}
-                                        <option value="{{ branch.id }}">{{ branch.name }}</option>
-                                        {% endfor %}
-                                    </select>
-                                </div>
-                                
-                                <div class="col-md-4">
-                                    <label class="form-label fw-bold">اختر القسم</label>
-                                    <select name="department" id="departmentSelect" class="form-select" required disabled>
-                                        <option value="">-- اختر قسم --</option>
-                                    </select>
-                                </div>
-                                
-                                <div class="col-md-4">
-                                    <label class="form-label fw-bold">الشهر</label>
-                                    <input type="month" name="month" class="form-control" value="{{ current_month }}" required>
-                                </div>
+                        <div class="row mb-4">
+                            <div class="col-md-4">
+                                <label class="form-label fw-bold">اختر الفرع</label>
+                                <select id="branchSelect" class="form-select" required>
+                                    <option value="">-- اختر فرع --</option>
+                                    {% for branch in branches %}
+                                    <option value="{{ branch.id }}">{{ branch.name }}</option>
+                                    {% endfor %}
+                                </select>
                             </div>
                             
-                            <button type="button" class="btn btn-primary" onclick="startEvaluation()">
-                                <i class="fas fa-play me-2"></i>بدء التقييم
-                            </button>
+                            <div class="col-md-4">
+                                <label class="form-label fw-bold">اختر القسم</label>
+                                <select name="department" id="departmentSelect" class="form-select" required disabled>
+                                    <option value="">-- اختر قسم --</option>
+                                </select>
+                            </div>
+                            
+                            <div class="col-md-4">
+                                <label class="form-label fw-bold">الشهر</label>
+                                <input type="month" name="month" class="form-control" value="{{ current_month }}" required>
+                            </div>
                         </div>
                         
-                        <hr class="my-4" id="divider" style="display: none;">
+                        <hr class="my-4">
                         
-                        <!-- المعايير (يظهر واحد تلو الآخر) -->
-                        <div id="criteriaContainer" style="display: none;">
-                            {% for criterion in criteria %}
-                            <div class="criterion-card" id="criterion_{{ forloop.counter }}" data-criterion-id="{{ criterion.id }}" data-criterion-name="{{ criterion.name }}" style="{% if not forloop.first %}display: none;{% endif %}">
-                                <div class="card border-primary shadow-sm">
-                                    <div class="card-header bg-primary text-white">
-                                        <h5 class="mb-0">
-                                            <i class="fas fa-clipboard-list me-2"></i>{{ criterion.name }}
-                                            <span class="badge bg-light text-dark float-end">الحد الأقصى: {{ criterion.max_observations }} ملاحظات</span>
-                                        </h5>
+                        <!-- إحصائيات التقييم المباشرة -->
+                        <div class="alert alert-info mb-4" style="background: linear-gradient(135deg, #235E88 0%, #3a7ca5 100%); color: white; border: none;">
+                            <div class="row text-center">
+                                <div class="col-md-3">
+                                    <h4 id="totalCriteria" class="mb-0">0</h4>
+                                    <small>معايير مفعّلة</small>
+                                </div>
+                                <div class="col-md-3">
+                                    <h4 id="totalObservations" class="mb-0">0</h4>
+                                    <small>إجمالي الملاحظات</small>
+                                </div>
+                                <div class="col-md-3">
+                                    <h4 id="totalScore" class="mb-0">0</h4>
+                                    <small>النقاط المكتسبة</small>
+                                </div>
+                                <div class="col-md-3">
+                                    <h4 id="percentage" class="mb-0">0%</h4>
+                                    <small>النسبة المئوية</small>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <h5 class="text-primary mb-3"><i class="fas fa-tasks me-2"></i>المعايير (اختر المعايير التي تريد تقييمها)</h5>
+                        <p class="text-muted small mb-3">💡 كلما قلت الملاحظات كان التقييم أفضل. يمكنك تفعيل/تعطيل أي معيار.</p>
+                        
+                        {% for criterion in criteria %}
+                        <div class="card mb-3 border-primary criterion-card" data-criterion-id="{{ criterion.id }}" data-max-obs="{{ criterion.max_observations }}">
+                            <div class="card-header bg-light d-flex align-items-center">
+                                <div class="form-check form-switch me-3">
+                                    <input class="form-check-input criterion-toggle" type="checkbox" 
+                                           id="toggle_{{ criterion.id }}" data-criterion-id="{{ criterion.id }}">
+                                    <label class="form-check-label" for="toggle_{{ criterion.id }}">
+                                        تفعيل
+                                    </label>
+                                </div>
+                                <h6 class="mb-0 flex-grow-1">{{ criterion.name }}</h6>
+                                <span class="badge bg-secondary me-2">الحد الأقصى: {{ criterion.max_observations }}</span>
+                                <span class="badge bg-success score-badge" id="score_{{ criterion.id }}">النقاط: 0</span>
+                            </div>
+                            <div class="card-body criterion-content" style="display: none;">
+                                <div class="row">
+                                    <div class="col-md-3">
+                                        <label class="form-label">عدد الملاحظات</label>
+                                        <input type="number" name="obs_count_{{ criterion.id }}" 
+                                               class="form-control obs-count-input" 
+                                               data-criterion-id="{{ criterion.id }}"
+                                               min="0" max="{{ criterion.max_observations }}" 
+                                               value="0" disabled>
                                     </div>
-                                    <div class="card-body">
-                                        <p class="text-muted mb-4">💡 أدخل الملاحظات فقط (الحقول الفارغة = لا يوجد ملاحظة)</p>
-                                        
-                                        <div class="row g-3">
-                                            {% for i in "12345678910"|make_list %}
-                                            <div class="col-md-6">
-                                                <div class="card bg-light">
-                                                    <div class="card-body p-3">
-                                                        <label class="form-label fw-bold">ملاحظة {{ forloop.counter }}</label>
-                                                        <textarea name="obs_{{ criterion.id }}_{{ forloop.counter }}" 
-                                                                  class="form-control mb-2" rows="2" 
-                                                                  placeholder="اكتب الملاحظة هنا (اختياري)..."></textarea>
-                                                        
-                                                        <!-- خيارات رفع الصورة -->
-                                                        <div class="d-flex gap-2 mb-2">
-                                                            <button type="button" class="btn btn-sm btn-primary" 
-                                                                    onclick="openCamera('image_{{ criterion.id }}_{{ forloop.counter }}')">
-                                                                <i class="fas fa-camera"></i> كاميرا
-                                                            </button>
-                                                            <button type="button" class="btn btn-sm btn-secondary" 
-                                                                    onclick="openFiles('image_{{ criterion.id }}_{{ forloop.counter }}')">
-                                                                <i class="fas fa-folder-open"></i> ملفات
-                                                            </button>
-                                                            <span class="file-name-display text-muted small align-self-center" 
-                                                                  id="display_{{ criterion.id }}_{{ forloop.counter }}"></span>
-                                                        </div>
-                                                        
-                                                        <!-- حقل الصورة المخفي -->
-                                                        <input type="file" name="image_{{ criterion.id }}_{{ forloop.counter }}" 
-                                                               id="image_{{ criterion.id }}_{{ forloop.counter }}"
-                                                               class="d-none" accept="image/*"
-                                                               onchange="displayFileName(this)">
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            {% endfor %}
-                                        </div>
+                                    
+                                    <div class="col-md-9">
+                                        <label class="form-label">وصف الملاحظات (اختياري)</label>
+                                        <textarea name="obs_desc_{{ criterion.id }}" class="form-control" rows="2" 
+                                                  placeholder="اكتب تفاصيل الملاحظات هنا..." disabled></textarea>
                                     </div>
                                 </div>
                                 
-                                <div class="d-flex gap-2 mt-3">
-                                    {% if not forloop.first %}
-                                    <button type="button" class="btn btn-secondary" onclick="previousCriterion({{ forloop.counter }})">
-                                        <i class="fas fa-arrow-right me-2"></i>السابق
-                                    </button>
-                                    {% endif %}
+                                <div class="mt-3">
+                                    <label class="form-label">إرفاق أو تصوير صور (اختياري - صور متعددة)</label>
                                     
-                                    {% if not forloop.last %}
-                                    <button type="button" class="btn btn-primary" onclick="nextCriterion({{ forloop.counter }})">
-                                        التالي<i class="fas fa-arrow-left ms-2"></i>
-                                    </button>
-                                    {% else %}
-                                    <button type="button" class="btn btn-success" onclick="finishEvaluation()">
-                                        <i class="fas fa-check me-2"></i>إنهاء وعرض الملخص
-                                    </button>
-                                    {% endif %}
+                                    <!-- أزرار التصوير والإرفاق -->
+                                    <div class="d-flex gap-2 mb-2">
+                                        <button type="button" class="btn btn-sm btn-primary" 
+                                                onclick="openCamera('images_{{ criterion.id }}')" disabled
+                                                id="camera_btn_{{ criterion.id }}">
+                                            <i class="fas fa-camera"></i> تصوير
+                                        </button>
+                                        <button type="button" class="btn btn-sm btn-secondary" 
+                                                onclick="openFiles('images_{{ criterion.id }}')" disabled
+                                                id="files_btn_{{ criterion.id }}">
+                                            <i class="fas fa-folder-open"></i> إرفاق من الملفات
+                                        </button>
+                                    </div>
+                                    
+                                    <input type="file" name="images_{{ criterion.id }}" 
+                                           id="images_{{ criterion.id }}"
+                                           class="d-none image-input" multiple accept="image/*"
+                                           onchange="showImagePreview(this, {{ criterion.id }})">
+                                    <small class="text-muted">يمكنك اختيار عدة صور لنفس المعيار</small>
+                                    <div id="preview_{{ criterion.id }}" class="mt-2 d-flex flex-wrap gap-2"></div>
                                 </div>
                             </div>
-                            {% endfor %}
+                        </div>
+                        {% endfor %}
+                        
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">ملاحظات عامة</label>
+                            <textarea name="notes" class="form-control" rows="3" 
+                                      placeholder="أي ملاحظات إضافية..."></textarea>
                         </div>
                         
-                        <!-- ملخص نهائي -->
-                        <div id="summarySection" style="display: none;">
+                        <div class="d-flex gap-2 mt-4">
+                            <button type="submit" class="btn btn-primary btn-lg">
+                                <i class="fas fa-save me-2"></i>حفظ التقييم
+                            </button>
+                            <a href="{% url 'evaluation_reports' %}" class="btn btn-secondary btn-lg">
+                                <i class="fas fa-chart-bar me-2"></i>التقارير
+                            </a>
+                            <a href="{% url 'investor_list' %}" class="btn btn-outline-secondary btn-lg">
+                                <i class="fas fa-arrow-right me-2"></i>رجوع
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
                             <div class="card border-success">
                                 <div class="card-header bg-success text-white">
                                     <h5 class="mb-0"><i class="fas fa-check-circle me-2"></i>ملخص التقييم</h5>
@@ -164,7 +185,7 @@
 
 <style>
 .bg-gradient-primary {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: linear-gradient(135deg, #235E88 0%, #3a7ca5 100%);
 }
 .card {
     border-radius: 15px;
@@ -173,17 +194,35 @@
     border-radius: 15px 15px 0 0 !important;
 }
 .criterion-card {
-    animation: fadeIn 0.5s;
+    transition: all 0.3s ease;
 }
-@keyframes fadeIn {
-    from { opacity: 0; transform: translateY(20px); }
-    to { opacity: 1; transform: translateY(0); }
+.criterion-card.active {
+    border-color: #28a745 !important;
+    box-shadow: 0 0 10px rgba(40, 167, 69, 0.3);
+}
+.form-check-input:checked {
+    background-color: #28a745;
+    border-color: #28a745;
+}
+.image-preview-item {
+    position: relative;
+    display: inline-block;
+}
+.image-preview-item img {
+    width: 60px;
+    height: 60px;
+    object-fit: cover;
+    border-radius: 8px;
+    border: 2px solid #ddd;
+}
+.image-preview-item .badge {
+    position: absolute;
+    top: -8px;
+    right: -8px;
 }
 </style>
 
 <script>
-let currentCriterion = 1;
-const totalCriteria = {{ criteria.count }};
 const departmentsByBranch = {};
 
 // تحميل الأقسام لكل فرع
@@ -196,128 +235,154 @@ departmentsByBranch[{{ branch.id }}] = [
 ];
 {% endfor %}
 
-// عند تغيير الفرع
-document.getElementById('branchSelect').addEventListener('change', function() {
-    const branchId = this.value;
-    const deptSelect = document.getElementById('departmentSelect');
+document.addEventListener('DOMContentLoaded', function() {
+    // عند تغيير الفرع
+    document.getElementById('branchSelect').addEventListener('change', function() {
+        const branchId = this.value;
+        const deptSelect = document.getElementById('departmentSelect');
+        
+        deptSelect.innerHTML = '<option value="">-- اختر قسم --</option>';
+        
+        if (branchId && departmentsByBranch[branchId]) {
+            departmentsByBranch[branchId].forEach(dept => {
+                const option = document.createElement('option');
+                option.value = dept.id;
+                option.textContent = dept.name;
+                deptSelect.appendChild(option);
+            });
+            deptSelect.disabled = false;
+        } else {
+            deptSelect.disabled = true;
+        }
+    });
     
-    deptSelect.innerHTML = '<option value="">-- اختر قسم --</option>';
+    // متغيرات عامة
+    const criteriaToggles = document.querySelectorAll('.criterion-toggle');
+    const obsCountInputs = document.querySelectorAll('.obs-count-input');
     
-    if (branchId && departmentsByBranch[branchId]) {
-        departmentsByBranch[branchId].forEach(dept => {
-            const option = document.createElement('option');
-            option.value = dept.id;
-            option.textContent = dept.name;
-            deptSelect.appendChild(option);
+    // دالة حساب الإحصائيات
+    function calculateStatistics() {
+        let activeCriteria = 0;
+        let totalObservations = 0;
+        let totalScore = 0;
+        let maxPossibleScore = 0;
+        
+        criteriaToggles.forEach(toggle => {
+            const criterionId = toggle.dataset.criterionId;
+            const card = document.querySelector(`[data-criterion-id="${criterionId}"]`);
+            const maxObs = parseInt(card.dataset.maxObs);
+            const obsInput = document.querySelector(`input[name="obs_count_${criterionId}"]`);
+            
+            if (toggle.checked) {
+                activeCriteria++;
+                const obsCount = parseInt(obsInput.value) || 0;
+                totalObservations += obsCount;
+                const score = maxObs - obsCount;
+                totalScore += score;
+                maxPossibleScore += maxObs;
+                
+                // تحديث badge النقاط
+                const scoreBadge = document.getElementById(`score_${criterionId}`);
+                scoreBadge.textContent = `النقاط: ${score}`;
+                scoreBadge.className = score >= maxObs * 0.7 ? 'badge bg-success score-badge' : 
+                                      score >= maxObs * 0.5 ? 'badge bg-warning score-badge' : 
+                                      'badge bg-danger score-badge';
+            }
         });
-        deptSelect.disabled = false;
-    } else {
-        deptSelect.disabled = true;
+        
+        // حساب النسبة المئوية
+        const percentage = maxPossibleScore > 0 ? ((totalScore / maxPossibleScore) * 100).toFixed(1) : 0;
+        
+        // تحديث الإحصائيات
+        document.getElementById('totalCriteria').textContent = activeCriteria;
+        document.getElementById('totalObservations').textContent = totalObservations;
+        document.getElementById('totalScore').textContent = totalScore;
+        document.getElementById('percentage').textContent = percentage + '%';
+        
+        // تغيير لون النسبة المئوية
+        const percentageEl = document.getElementById('percentage');
+        percentageEl.style.color = percentage >= 70 ? '#28a745' : 
+                                   percentage >= 50 ? '#ffc107' : '#dc3545';
     }
+    
+    // معالج تفعيل/تعطيل المعايير
+    criteriaToggles.forEach(toggle => {
+        toggle.addEventListener('change', function() {
+            const criterionId = this.dataset.criterionId;
+            const card = document.querySelector(`[data-criterion-id="${criterionId}"]`);
+            const content = card.querySelector('.criterion-content');
+            const inputs = content.querySelectorAll('input, textarea');
+            const cameraBtn = document.getElementById(`camera_btn_${criterionId}`);
+            const filesBtn = document.getElementById(`files_btn_${criterionId}`);
+            
+            if (this.checked) {
+                content.style.display = 'block';
+                card.classList.add('active');
+                inputs.forEach(input => {
+                    if (!input.classList.contains('image-input')) {
+                        input.disabled = false;
+                    }
+                });
+                if (cameraBtn) cameraBtn.disabled = false;
+                if (filesBtn) filesBtn.disabled = false;
+            } else {
+                content.style.display = 'none';
+                card.classList.remove('active');
+                inputs.forEach(input => {
+                    input.disabled = true;
+                    if (input.type === 'number') input.value = 0;
+                });
+                if (cameraBtn) cameraBtn.disabled = true;
+                if (filesBtn) filesBtn.disabled = true;
+            }
+            
+            calculateStatistics();
+        });
+    });
+    
+    // معالج تغيير عدد الملاحظات
+    obsCountInputs.forEach(input => {
+        input.addEventListener('input', calculateStatistics);
+    });
+    
+    // حساب أولي
+    calculateStatistics();
 });
 
-// فتح الكاميرا
+// فتح الكاميرا للتصوير
 function openCamera(inputId) {
     const input = document.getElementById(inputId);
     input.setAttribute('capture', 'environment'); // استخدام الكاميرا الخلفية
     input.click();
 }
 
-// فتح الملفات
+// فتح الملفات للإرفاق
 function openFiles(inputId) {
     const input = document.getElementById(inputId);
     input.removeAttribute('capture'); // إزالة خاصية الكاميرا
     input.click();
 }
 
-// عرض اسم الملف المحدد
-function displayFileName(input) {
-    const displayId = 'display_' + input.id.replace('image_', '');
-    const display = document.getElementById(displayId);
+// عرض معاينة الصور المتعددة
+function showImagePreview(input, criterionId) {
+    const previewDiv = document.getElementById(`preview_${criterionId}`);
+    previewDiv.innerHTML = '';
     
-    if (input.files && input.files[0]) {
-        display.innerHTML = '<i class="fas fa-check-circle text-success"></i> ' + input.files[0].name;
-    } else {
-        display.innerHTML = '';
+    if (input.files && input.files.length > 0) {
+        Array.from(input.files).forEach((file, index) => {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const div = document.createElement('div');
+                div.className = 'image-preview-item';
+                div.innerHTML = `
+                    <img src="${e.target.result}" alt="صورة ${index + 1}">
+                    <span class="badge bg-primary">${index + 1}</span>
+                `;
+                previewDiv.appendChild(div);
+            };
+            reader.readAsDataURL(file);
+        });
     }
-}
-
-function startEvaluation() {
-    const dept = document.getElementById('departmentSelect').value;
-    if (!dept) {
-        alert('❌ يرجى اختيار القسم أولاً');
-        return;
-    }
-    
-    document.getElementById('basicInfo').style.display = 'none';
-    document.getElementById('divider').style.display = 'block';
-    document.getElementById('criteriaContainer').style.display = 'block';
-    updateProgress();
-}
-
-function nextCriterion(current) {
-    document.getElementById('criterion_' + current).style.display = 'none';
-    document.getElementById('criterion_' + (current + 1)).style.display = 'block';
-    currentCriterion = current + 1;
-    updateProgress();
-    window.scrollTo(0, 0);
-}
-
-function previousCriterion(current) {
-    document.getElementById('criterion_' + current).style.display = 'none';
-    document.getElementById('criterion_' + (current - 1)).style.display = 'block';
-    currentCriterion = current - 1;
-    updateProgress();
-    window.scrollTo(0, 0);
-}
-
-function finishEvaluation() {
-    // إخفاء آخر معيار
-    document.getElementById('criterion_' + totalCriteria).style.display = 'none';
-    
-    // إنشاء الملخص
-    let summaryHTML = '<table class="table table-striped"><thead><tr><th>المعيار</th><th>عدد الملاحظات</th><th>النقاط</th></tr></thead><tbody>';
-    let totalObs = 0;
-    
-    for (let i = 1; i <= totalCriteria; i++) {
-        const card = document.getElementById('criterion_' + i);
-        const criterionId = card.dataset.criterionId;
-        const criterionName = card.dataset.criterionName;
-        
-        let obsCount = 0;
-        
-        for (let j = 1; j <= 10; j++) {
-            const textarea = document.querySelector(`textarea[name="obs_${criterionId}_${j}"]`);
-            if (textarea && textarea.value.trim()) {
-                obsCount++;
-            }
-        }
-        
-        const score = 10 - obsCount;
-        totalObs += obsCount;
-        
-        const rowClass = obsCount <= 3 ? 'table-success' : (obsCount <= 6 ? 'table-warning' : 'table-danger');
-        summaryHTML += `<tr class="${rowClass}"><td>${criterionName}</td><td>${obsCount}</td><td>${score}</td></tr>`;
-    }
-    
-    summaryHTML += '</tbody></table>';
-    summaryHTML += `<div class="alert alert-info"><strong>إجمالي الملاحظات:</strong> ${totalObs} | <strong>النسبة:</strong> ${(((totalCriteria * 10 - totalObs) / (totalCriteria * 10)) * 100).toFixed(1)}%</div>`;
-    
-    document.getElementById('summaryContent').innerHTML = summaryHTML;
-    document.getElementById('summarySection').style.display = 'block';
-    window.scrollTo(0, 0);
-}
-
-function backToLastCriterion() {
-    document.getElementById('summarySection').style.display = 'none';
-    document.getElementById('criterion_' + totalCriteria).style.display = 'block';
-    currentCriterion = totalCriteria;
-}
-
-function updateProgress() {
-    const progress = (currentCriterion / totalCriteria) * 100;
-    document.getElementById('progressBar').style.width = progress + '%';
-    document.getElementById('currentCriterionNum').textContent = currentCriterion;
 }
 </script>
 {% endblock %}

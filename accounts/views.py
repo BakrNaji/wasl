@@ -272,11 +272,21 @@ def profile(request):
                 user_owner = Owner.objects.filter(user=request.user).first()
                 user_investor = Investor.objects.filter(user=request.user).first()
 
-                # Get evaluations created by this owner (if owner)
-                owner_evaluations = []
+                # Get NEW evaluations created by this owner (if owner)
+                owner_dept_evaluations = []
+                owner_emp_evaluations = []
                 if user_owner:
-                    from The_Investor.models import Evaluation
-                    owner_evaluations = Evaluation.objects.filter(evaluator=user_owner).select_related('investor__user').prefetch_related('scores')
+                    from The_Owner.models import DepartmentEvaluation, EmployeeEvaluation
+                    owner_dept_evaluations = DepartmentEvaluation.objects.filter(evaluator=user_owner).select_related('department__branch').order_by('-created_at')[:5]
+                    owner_emp_evaluations = EmployeeEvaluation.objects.filter(evaluator=user_owner).select_related('employee__user', 'employee__department', 'employee__branch').order_by('-created_at')[:5]
+
+                # Get NEW evaluations for this investor/employee
+                employee_evaluations = []
+                latest_employee_eval = None
+                if user_investor:
+                    from The_Owner.models import EmployeeEvaluation
+                    employee_evaluations = EmployeeEvaluation.objects.filter(employee=user_investor).select_related('evaluator__user').order_by('-month')[:5]
+                    latest_employee_eval = employee_evaluations.first() if employee_evaluations else None
 
                 context = {
                     'fname': request.user.first_name,
@@ -284,13 +294,14 @@ def profile(request):
                     'address': user_owner.address if user_owner else (user_investor.address if user_investor else ''),
                     'email': request.user.email,
                     'user': request.user.username,
-                    'evaluations': user_investor.evaluations_received.all() if user_investor else [],
-                    'average_evaluation': (sum([float(e.overall_score) for e in user_investor.evaluations_received.all()]) / user_investor.evaluations_received.count()) if user_investor and user_investor.evaluations_received.exists() else None,
+                    'employee_evaluations': employee_evaluations,
+                    'latest_employee_eval': latest_employee_eval,
                     'branch': user_investor.branch if user_investor else '',
                     'department': user_investor.department if user_investor else '',
                     'job_title': user_investor.job_title if user_investor else '',
                     'photo_url': (user_owner.photo.url if user_owner and getattr(user_owner, 'photo', None) else (user_investor.photo.url if user_investor and getattr(user_investor, 'photo', None) else '')),
-                    'owner_evaluations': owner_evaluations,
+                    'owner_dept_evaluations': owner_dept_evaluations,
+                    'owner_emp_evaluations': owner_emp_evaluations,
                     'is_owner': bool(user_owner),
                 }
 

@@ -227,47 +227,36 @@ def evaluate_department(request):
             if not created:
                 evaluation.notes = notes
                 evaluation.evaluator = owner
+                # حذف الملاحظات القديمة لتحديثها
+                evaluation.details.all().delete()
             
-            # حفظ الملاحظات لكل معيار (10 ملاحظات لكل معيار)
+            # معالجة المعايير المفعّلة فقط (التي تم إرسال بياناتها)
             for criterion in criteria:
-                # حساب عدد الملاحظات الفعلية من الحقول المدخلة
-                obs_count = 0
-                obs_descriptions = []
-                
-                for i in range(1, 11):  # 10 ملاحظات
-                    obs_text = request.POST.get(f'obs_{criterion.id}_{i}', '').strip()
-                    if obs_text:
-                        obs_count += 1
-                        obs_descriptions.append(f"ملاحظة {i}: {obs_text}")
-                
-                # دمج الوصف
-                combined_desc = "\n".join(obs_descriptions) if obs_descriptions else ""
-                
-                observation, obs_created = EvaluationObservation.objects.get_or_create(
-                    evaluation=evaluation,
-                    criterion=criterion,
-                    defaults={'observations_count': obs_count, 'description': combined_desc}
-                )
-                
-                if not obs_created:
-                    observation.observations_count = obs_count
-                    observation.description = combined_desc
-                    observation.save()
-                
-                # حذف الصور القديمة
-                observation.images.all().delete()
-                
-                # رفع الصور (كل ملاحظة لها صورة)
-                for i in range(1, 11):
-                    image_file = request.FILES.get(f'image_{criterion.id}_{i}')
-                    if image_file:
-                        ObservationImage.objects.create(
-                            observation=observation, 
-                            image=image_file,
-                            caption=f"ملاحظة {i}"
-                        )
+                obs_count_key = f'obs_count_{criterion.id}'
+                # تحقق إذا كان المعيار مفعّل (البيانات موجودة وليست disabled)
+                if obs_count_key in request.POST:
+                    obs_count = request.POST.get(obs_count_key, 0)
+                    obs_desc = request.POST.get(f'obs_desc_{criterion.id}', '')
+                    
+                    # إنشاء الملاحظة فقط للمعايير المفعّلة
+                    try:
+                        obs_count = int(obs_count)
+                        if obs_count >= 0:  # تأكد أن العدد صحيح
+                            observation = EvaluationObservation.objects.create(
+                                evaluation=evaluation,
+                                criterion=criterion,
+                                observations_count=obs_count,
+                                description=obs_desc
+                            )
+                            
+                            # إضافة الصور المتعددة
+                            images = request.FILES.getlist(f'images_{criterion.id}')
+                            for img in images:
+                                ObservationImage.objects.create(observation=observation, image=img)
+                    except (ValueError, TypeError):
+                        continue
             
-            evaluation.save()  # لحساب الإجماليات
+            evaluation.save()  # لإعادة حساب الإحصائيات
             messages.success(request, f'✅ تم حفظ تقييم {department.name} بنجاح!')
             return redirect('evaluation_reports')
     
@@ -309,27 +298,36 @@ def evaluate_employee(request):
             if not created:
                 evaluation.notes = notes
                 evaluation.evaluator = owner
+                # حذف الملاحظات القديمة لتحديثها
+                evaluation.employee_observations.all().delete()
             
+            # معالجة المعايير المفعّلة فقط (التي تم إرسال بياناتها)
             for criterion in criteria:
-                obs_count = request.POST.get(f'obs_count_{criterion.id}', 0)
-                obs_desc = request.POST.get(f'obs_desc_{criterion.id}', '')
-                
-                observation, obs_created = EmployeeObservation.objects.get_or_create(
-                    evaluation=evaluation,
-                    criterion=criterion,
-                    defaults={'observations_count': obs_count, 'description': obs_desc}
-                )
-                
-                if not obs_created:
-                    observation.observations_count = obs_count
-                    observation.description = obs_desc
-                    observation.save()
-                
-                images = request.FILES.getlist(f'images_{criterion.id}')
-                for img in images:
-                    EmployeeObservationImage.objects.create(observation=observation, image=img)
+                obs_count_key = f'obs_count_{criterion.id}'
+                # تحقق إذا كان المعيار مفعّل (البيانات موجودة وليست disabled)
+                if obs_count_key in request.POST:
+                    obs_count = request.POST.get(obs_count_key, 0)
+                    obs_desc = request.POST.get(f'obs_desc_{criterion.id}', '')
+                    
+                    # إنشاء الملاحظة فقط للمعايير المفعّلة
+                    try:
+                        obs_count = int(obs_count)
+                        if obs_count >= 0:  # تأكد أن العدد صحيح
+                            observation = EmployeeObservation.objects.create(
+                                evaluation=evaluation,
+                                criterion=criterion,
+                                observations_count=obs_count,
+                                description=obs_desc
+                            )
+                            
+                            # إضافة الصور
+                            images = request.FILES.getlist(f'images_{criterion.id}')
+                            for img in images:
+                                EmployeeObservationImage.objects.create(observation=observation, image=img)
+                    except (ValueError, TypeError):
+                        continue
             
-            evaluation.save()
+            evaluation.save()  # لإعادة حساب الإحصائيات
             messages.success(request, f'✅ تم حفظ تقييم {employee.user.username} بنجاح!')
             return redirect('evaluation_reports')
     
